@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva SQL & JOINs - Preparación Examen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos personalizados para diagramas Venn y transiciones */
+        .venn-circle {
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tab-active {
+            border-bottom: 3px solid #4f46e5;
+            color: #4f46e5;
+            font-weight: 700;
+        }
+        .code-keyword { color: #c084fc; font-weight: 600; }
+        .code-table { color: #38bdf8; }
+        .code-field { color: #fde047; }
+        .code-operator { color: #f472b6; }
+        .code-comment { color: #64748b; font-style: italic; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; rounded: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+    <!-- Navbar Superior -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center py-3 gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-md shadow-indigo-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">Guía Suprema SQL & JOINs</h1>
+                        <p class="text-xs text-slate-500 font-medium">100% basada en las clases y laboratorios del PhD Cristian Ordoñez</p>
+                    </div>
+                </div>
+
+                <!-- Navegación por Módulos -->
+                <nav class="flex space-x-1 sm:space-x-2 bg-slate-100 p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
+                    <button onclick="switchSection('fundamentos')" id="nav-fundamentos" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition">
+                        1. SQL Completo
+                    </button>
+                    <button onclick="switchSection('laboratorio')" id="nav-laboratorio" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">
+                        2. Laboratorio JOINs
+                    </button>
+                    <button onclick="switchSection('simulador')" id="nav-simulador" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5">
+                        <span>3. Examen Real (12 Retos)</span>
+                        <span class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded-full font-bold">Pro</span>
+                    </button>
+                    <button onclick="switchSection('estrategia')" id="nav-estrategia" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">
+                        4. Protocolo Examen
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenedor Principal -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+        <!-- =================================================================== -->
+        <!-- SECCIÓN 1: TODO EL SQL DQL DE TU MATERIA (DESDE CERO)               -->
+        <!-- =================================================================== -->
+        <section id="sec-fundamentos" class="space-y-8">
+            <!-- Banner Bienvenida -->
+            <div class="bg-gradient-to-r from-indigo-600 to-violet-700 rounded-2xl p-6 sm:p-8 text-white shadow-lg">
+                <div class="max-w-4xl">
+                    <span class="inline-block bg-white/20 backdrop-blur-sm text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-3">
+                        Módulo 1 • Todo el SQL de tus Diapositivas y Talleres
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mb-3">Domina la estructura completa de una consulta SQL</h2>
+                    <p class="text-indigo-100 text-sm sm:text-base leading-relaxed">
+                        Revisando tus laboratorios (<strong>Universidad, Banco y Biblioteca</strong>), el profesor no solo evalúa <code>JOIN</code>, sino también cómo los combinas con filtros (<code>WHERE</code>, <code>LIKE</code>, <code>IS NULL</code>), agrupaciones (<code>GROUP BY</code>, <code>HAVING</code>), funciones matemáticas (<code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>) y subconsultas.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Orden Estricto de las Cláusulas SQL (Diapositiva 15 - Clase 6) -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">El Orden Obligatorio de las Cláusulas en SQL</h3>
+                        <p class="text-sm text-slate-500">Si cambias este orden frente al profesor, SQL lanzará un error de sintaxis. Haz clic en cada bloque para ver ejemplos de tus talleres.</p>
+                    </div>
+                    <span class="bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold px-3 py-1.5 rounded-lg">
+                        ⚠️ ¡Memoriza esta secuencia!
+                    </span>
+                </div>
+
+                <!-- Cadena visual de orden -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 mb-6">
+                    <button onclick="explainPart('select')" class="p-2.5 rounded-xl bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 text-center transition">
+                        <span class="block text-[10px] font-bold text-indigo-500">PASO 1</span>
+                        <span class="font-mono font-extrabold text-indigo-900 text-xs sm:text-sm">SELECT</span>
+                    </button>
+                    <button onclick="explainPart('from')" class="p-2.5 rounded-xl bg-sky-50 border border-sky-200 hover:bg-sky-100 text-center transition">
+                        <span class="block text-[10px] font-bold text-sky-500">PASO 2</span>
+                        <span class="font-mono font-extrabold text-sky-900 text-xs sm:text-sm">FROM</span>
+                    </button>
+                    <button onclick="explainPart('join')" class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-center transition">
+                        <span class="block text-[10px] font-bold text-emerald-500">PASO 3</span>
+                        <span class="font-mono font-extrabold text-emerald-900 text-xs sm:text-sm">JOIN ... ON</span>
+                    </button>
+                    <button onclick="explainPart('where')" class="p-2.5 rounded-xl bg-amber-50 border border-amber-200 hover:bg-amber-100 text-center transition">
+                        <span class="block text-[10px] font-bold text-amber-600">PASO 4</span>
+                        <span class="font-mono font-extrabold text-amber-900 text-xs sm:text-sm">WHERE</span>
+                    </button>
+                    <button onclick="explainPart('groupby')" class="p-2.5 rounded-xl bg-purple-50 border border-purple-200 hover:bg-purple-100 text-center transition">
+                        <span class="block text-[10px] font-bold text-purple-500">PASO 5</span>
+                        <span class="font-mono font-extrabold text-purple-900 text-xs sm:text-sm">GROUP BY</span>
+                    </button>
+                    <button onclick="explainPart('having')" class="p-2.5 rounded-xl bg-pink-50 border border-pink-200 hover:bg-pink-100 text-center transition">
+                        <span class="block text-[10px] font-bold text-pink-500">PASO 6</span>
+                        <span class="font-mono font-extrabold text-pink-900 text-xs sm:text-sm">HAVING</span>
+                    </button>
+                    <button onclick="explainPart('orderby')" class="p-2.5 rounded-xl bg-slate-100 border border-slate-300 hover:bg-slate-200 text-center transition col-span-2 sm:col-span-1">
+                        <span class="block text-[10px] font-bold text-slate-500">PASO 7</span>
+                        <span class="font-mono font-extrabold text-slate-900 text-xs sm:text-sm">ORDER BY</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <!-- Código Maestro Interactivo -->
+                    <div class="lg:col-span-7 bg-slate-900 rounded-xl p-5 font-mono text-xs sm:text-sm text-slate-200 shadow-inner space-y-1.5">
+                        <div onclick="explainPart('select')" class="cursor-pointer p-2 rounded-lg hover:bg-slate-800 border border-transparent hover:border-indigo-500/50 transition">
+                            <span class="code-keyword">SELECT</span> <span class="code-field">s.nombre AS sucursal, COUNT(e.id_empleado) AS total_emp</span>
+                        </div>
+                        <div onclick="explainPart('from')" class="cursor-pointer p-2 rounded-lg hover:bg-slate-800 border border-transparent hover:border-sky-500/50 transition">
+                            <span class="code-keyword">FROM</span> <span class="code-table">sucursales s</span>
+                        </div>
+                        <div onclick="explainPart('join')" class="cursor-pointer p-2 rounded-lg hover:bg-slate-800 border border-transparent hover:border-emerald-500/50 transition">
+                            <span class="code-keyword">LEFT JOIN</span> <span class="code-table">empleados e</span> <span class="code-keyword">ON</span> <span class="code-field">s.id_sucursal = e.id_sucursal</span>
+                        </div>
+                        <div onclick="explainPart('where')" class="cursor-pointer p-2 rounded-lg hover:bg-slate-800 border border-transparent hover:border-amber-500/50 transition">
+                            <span class="code-keyword">WHERE</span> <span class="code-field">e.salario > 2000000</span>
+                        </div>
+                        <div onclick="explainPart('groupby')" class="cursor-pointer p-2 rounded-lg hover:bg-slate-800 border border-transparent hover:border-purple-500/50 transition">
+                            <span class="code-keyword">GROUP BY</span> <span class="code-field">s.nombre</span>
+                        </div>
+                        <div onclick="explainPart('having')" class="cursor-pointer p-2 rounded-lg hover:bg-slate-800 border border-transparent hover:border-pink-500/50 transition">
+                            <span class="code-keyword">HAVING</span> <span class="code-field">COUNT(e.id_empleado) >= 1</span>
+                        </div>
+                        <div onclick="explainPart('orderby')" class="cursor-pointer p-2 rounded-lg hover:bg-slate-800 border border-transparent hover:border-slate-500/50 transition">
+                            <span class="code-keyword">ORDER BY</span> <span class="code-field">total_emp DESC</span><span class="text-slate-400">;</span>
+                        </div>
+                    </div>
+
+                    <!-- Panel de Explicación Dinámica -->
+                    <div id="anatomy-explanation" class="lg:col-span-5 bg-indigo-50/70 border border-indigo-100 rounded-xl p-5 h-full flex flex-col justify-center">
+                        <div class="flex items-center gap-2 text-indigo-700 font-bold text-sm mb-2">
+                            <span class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs">1</span>
+                            <span>SELECT (¿Qué columnas o cálculos quieres ver?)</span>
+                        </div>
+                        <p class="text-sm text-slate-700 leading-relaxed mb-3">
+                            Aquí escribes las columnas que pidió el profesor separadas por comas. Puedes usar <code>AS</code> para ponerle un nombre bonito a la columna (alias), o usar funciones como <code>COUNT()</code>, <code>SUM()</code>, <code>AVG()</code>.
+                        </p>
+                        <div class="bg-white p-3 rounded-lg border border-indigo-100 text-xs text-slate-600">
+                            <strong>Tip vital:</strong> Si usas una función como <code>COUNT(...)</code> junto con una columna normal como <code>s.nombre</code>, ¡estás obligado a poner <code>GROUP BY s.nombre</code> más abajo!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Herramientas Clave de los Talleres (Operadores, Agregaciones y Subconsultas) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1: Operadores WHERE -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <h4 class="font-bold text-slate-900 text-base mb-1">1. Operadores en WHERE</h4>
+                    <p class="text-xs text-slate-500 mb-3">Sacados de Clase 6 y Talleres Biblioteca / Polideportivo</p>
+                    <ul class="space-y-2 text-xs text-slate-700 font-mono">
+                        <li class="p-2 bg-slate-50 rounded-lg border border-slate-100">
+                            <strong class="text-indigo-700">=, &lt;&gt;, &gt;, &lt;, &gt;=, &lt;=</strong>
+                            <span class="block font-sans text-slate-500 mt-0.5">Comparar números o fechas. Ej: <code>WHERE saldo &gt; 5000000</code></span>
+                        </li>
+                        <li class="p-2 bg-slate-50 rounded-lg border border-slate-100">
+                            <strong class="text-indigo-700">AND / OR / IN</strong>
+                            <span class="block font-sans text-slate-500 mt-0.5">Combinar condiciones. Ej: <code>WHERE tipo IN ('Premium', 'VIP') AND edad &gt; 20</code></span>
+                        </li>
+                        <li class="p-2 bg-slate-50 rounded-lg border border-slate-100">
+                            <strong class="text-indigo-700">LIKE '%texto%'</strong>
+                            <span class="block font-sans text-slate-500 mt-0.5">Buscar texto parcial. Ej: <code>WHERE correo LIKE '%@gmail.com'</code> o <code>nombre LIKE 'L%'</code></span>
+                        </li>
+                        <li class="p-2 bg-slate-50 rounded-lg border border-slate-100">
+                            <strong class="text-indigo-700">IS NULL / IS NOT NULL</strong>
+                            <span class="block font-sans text-slate-500 mt-0.5">Préstamos activos: <code>WHERE fecha_devolucion IS NULL</code></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Card 2: Funciones de Agregación -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <h4 class="font-bold text-slate-900 text-base mb-1">2. Funciones de Agregación</h4>
+                    <p class="text-xs text-slate-500 mb-3">Calculan un resumen sobre muchas filas (Clase 6, Diap. 14)</p>
+                    <ul class="space-y-2 text-xs text-slate-700 font-mono">
+                        <li class="p-2 bg-slate-50 rounded-lg border border-slate-100">
+                            <strong class="text-emerald-700">COUNT(*) / COUNT(col)</strong>
+                            <span class="block font-sans text-slate-500 mt-0.5">Cuenta cuántas filas hay. Ej: <code>SELECT COUNT(*) FROM clientes;</code></span>
+                        </li>
+                        <li class="p-2 bg-slate-50 rounded-lg border border-slate-100">
+                            <strong class="text-emerald-700">SUM(columna)</strong>
+                            <span class="block font-sans text-slate-500 mt-0.5">Suma valores numéricos. Ej: <code>SUM(monto)</code> por tipo de transacción.</span>
+                        </li>
+                        <li class="p-2 bg-slate-50 rounded-lg border border-slate-100">
+                            <strong class="text-emerald-700">AVG(columna)</strong>
+                            <span class="block font-sans text-slate-500 mt-0.5">Calcula el promedio. Ej: <code>AVG(salario)</code> de empleados.</span>
+                        </li>
+                        <li class="p-2 bg-slate-50 rounded-lg border border-slate-100">
+                            <strong class="text-emerald-700">MIN(col) / MAX(col)</strong>
+                            <span class="block font-sans text-slate-500 mt-0.5">El menor o mayor valor. Ej: <code>MIN(anio_publicacion)</code> (libro más antiguo).</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Card 3: Subconsultas en WHERE (Lab Banco) -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <h4 class="font-bold text-slate-900 text-base mb-1">3. Subconsultas en WHERE</h4>
+                    <p class="text-xs text-slate-500 mb-3">¡Aparecen en las preguntas 15 a 19 del Lab del Banco!</p>
+                    <div class="space-y-2.5 text-xs text-slate-700">
+                        <div class="p-2.5 bg-amber-50/70 rounded-lg border border-amber-200">
+                            <span class="font-bold text-amber-900 block mb-1">Mayor al promedio (Pregunta 16):</span>
+                            <code class="block font-mono text-[11px] bg-white p-1.5 rounded border border-amber-100">
+                                SELECT * FROM cuentas<br>
+                                WHERE saldo &gt; (SELECT AVG(saldo) FROM cuentas);
+                            </code>
+                        </div>
+                        <div class="p-2.5 bg-amber-50/70 rounded-lg border border-amber-200">
+                            <span class="font-bold text-amber-900 block mb-1">El valor máximo/mínimo (Pregunta 17 y 19):</span>
+                            <code class="block font-mono text-[11px] bg-white p-1.5 rounded border border-amber-100">
+                                SELECT * FROM empleados<br>
+                                WHERE salario = (SELECT MAX(salario) FROM empleados);
+                            </code>
+                        </div>
+                        <div class="p-2.5 bg-amber-50/70 rounded-lg border border-amber-200">
+                            <span class="font-bold text-amber-900 block mb-1">Los que NO están en otra tabla (Pregunta 18):</span>
+                            <code class="block font-mono text-[11px] bg-white p-1.5 rounded border border-amber-100">
+                                SELECT * FROM clientes<br>
+                                WHERE id_cliente NOT IN (SELECT id_cliente FROM prestamos);
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visor de los 3 Esquemas de Base de Datos de tus Talleres -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Las 3 Bases de Datos de tus Talleres</h3>
+                        <p class="text-sm text-slate-500">El profesor probablemente usará una de estas estructuras en el examen. Explora sus tablas y llaves (PK y FK):</p>
+                    </div>
+                    <div class="flex bg-slate-100 p-1 rounded-xl">
+                        <button onclick="switchSchema('uni')" id="sch-btn-uni" class="sch-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-indigo-600 shadow-xs">1. Universidad</button>
+                        <button onclick="switchSchema('banco')" id="sch-btn-banco" class="sch-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600">2. Banco (Lab Final)</button>
+                        <button onclick="switchSchema('biblio')" id="sch-btn-biblio" class="sch-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600">3. Biblioteca</button>
+                    </div>
+                </div>
+
+                <!-- Esquema 1: Universidad -->
+                <div id="schema-uni" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div class="border-2 border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+                        <div class="bg-slate-800 text-white px-4 py-2 flex justify-between items-center font-mono text-xs font-bold">
+                            <span>estudiantes (e)</span>
+                            <span class="bg-slate-700 px-2 py-0.5 rounded text-[10px]">Tabla Fuerte</span>
+                        </div>
+                        <div class="p-3 space-y-1.5 text-xs font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-2 rounded-lg font-bold text-amber-900">🔑 id_estudiante (PK)</div>
+                            <div class="bg-white border border-slate-200 p-2 rounded-lg">nombre, apellido, correo, edad, ciudad</div>
+                        </div>
+                    </div>
+                    <div class="border-2 border-indigo-300 rounded-xl overflow-hidden bg-indigo-50/30">
+                        <div class="bg-indigo-600 text-white px-4 py-2 flex justify-between items-center font-mono text-xs font-bold">
+                            <span>inscripciones (i)</span>
+                            <span class="bg-indigo-500 px-2 py-0.5 rounded text-[10px]">Tabla Puente</span>
+                        </div>
+                        <div class="p-3 space-y-1.5 text-xs font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-2 rounded-lg font-bold text-amber-900">🔑 id_inscripcion (PK)</div>
+                            <div class="bg-sky-50 border border-sky-200 p-2 rounded-lg font-bold text-sky-900">🔗 id_estudiante (FK) → estudiantes</div>
+                            <div class="bg-sky-50 border border-sky-200 p-2 rounded-lg font-bold text-sky-900">🔗 id_curso (FK) → cursos</div>
+                            <div class="bg-white border border-slate-200 p-2 rounded-lg">fecha_inscripcion, nota_final</div>
+                        </div>
+                    </div>
+                    <div class="border-2 border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+                        <div class="bg-slate-800 text-white px-4 py-2 flex justify-between items-center font-mono text-xs font-bold">
+                            <span>cursos (c)</span>
+                            <span class="bg-slate-700 px-2 py-0.5 rounded text-[10px]">Tabla Fuerte</span>
+                        </div>
+                        <div class="p-3 space-y-1.5 text-xs font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-2 rounded-lg font-bold text-amber-900">🔑 id_curso (PK)</div>
+                            <div class="bg-white border border-slate-200 p-2 rounded-lg">nombre_curso, duracion, docente</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Esquema 2: Banco (Lab Final) -->
+                <div id="schema-banco" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+                        <div class="bg-slate-800 text-white px-3 py-2 font-mono text-xs font-bold">clientes (cl)</div>
+                        <div class="p-2.5 space-y-1 text-[11px] font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-1.5 rounded font-bold">🔑 id_cliente (PK)</div>
+                            <div class="bg-white border border-slate-200 p-1.5 rounded">nombre, apellido, telefono, correo, ciudad</div>
+                        </div>
+                    </div>
+                    <div class="border-2 border-indigo-200 rounded-xl overflow-hidden bg-indigo-50/20">
+                        <div class="bg-indigo-600 text-white px-3 py-2 font-mono text-xs font-bold">cuentas (cu)</div>
+                        <div class="p-2.5 space-y-1 text-[11px] font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-1.5 rounded font-bold">🔑 id_cuenta (PK)</div>
+                            <div class="bg-sky-50 border border-sky-200 p-1.5 rounded font-bold text-sky-900">🔗 id_cliente (FK), id_tipo (FK)</div>
+                            <div class="bg-white border border-slate-200 p-1.5 rounded">numero_cuenta, saldo, fecha_apertura, estado</div>
+                        </div>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+                        <div class="bg-slate-800 text-white px-3 py-2 font-mono text-xs font-bold">tipos_cuenta (tc)</div>
+                        <div class="p-2.5 space-y-1 text-[11px] font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-1.5 rounded font-bold">🔑 id_tipo (PK)</div>
+                            <div class="bg-white border border-slate-200 p-1.5 rounded">descripcion ('Ahorros', 'Corriente')</div>
+                        </div>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+                        <div class="bg-slate-800 text-white px-3 py-2 font-mono text-xs font-bold">transacciones (tr)</div>
+                        <div class="p-2.5 space-y-1 text-[11px] font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-1.5 rounded font-bold">🔑 id_transaccion (PK)</div>
+                            <div class="bg-sky-50 border border-sky-200 p-1.5 rounded font-bold text-sky-900">🔗 id_cuenta (FK) → cuentas</div>
+                            <div class="bg-white border border-slate-200 p-1.5 rounded">tipo, monto, fecha</div>
+                        </div>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+                        <div class="bg-slate-800 text-white px-3 py-2 font-mono text-xs font-bold">prestamos (pr)</div>
+                        <div class="p-2.5 space-y-1 text-[11px] font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-1.5 rounded font-bold">🔑 id_prestamo (PK)</div>
+                            <div class="bg-sky-50 border border-sky-200 p-1.5 rounded font-bold text-sky-900">🔗 id_cliente (FK) → clientes</div>
+                            <div class="bg-white border border-slate-200 p-1.5 rounded">monto, tasa_interes, fecha_inicio, cuotas</div>
+                        </div>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+                        <div class="bg-slate-800 text-white px-3 py-2 font-mono text-xs font-bold">empleados (em)</div>
+                        <div class="p-2.5 space-y-1 text-[11px] font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-1.5 rounded font-bold">🔑 id_empleado (PK)</div>
+                            <div class="bg-sky-50 border border-sky-200 p-1.5 rounded font-bold text-sky-900">🔗 id_sucursal (FK) → sucursales</div>
+                            <div class="bg-white border border-slate-200 p-1.5 rounded">nombre, cargo, salario</div>
+                        </div>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50 sm:col-span-2">
+                        <div class="bg-slate-800 text-white px-3 py-2 font-mono text-xs font-bold">sucursales (su)</div>
+                        <div class="p-2.5 space-y-1 text-[11px] font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-1.5 rounded font-bold">🔑 id_sucursal (PK)</div>
+                            <div class="bg-white border border-slate-200 p-1.5 rounded">nombre, ciudad, direccion</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Esquema 3: Biblioteca -->
+                <div id="schema-biblio" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+                        <div class="bg-slate-800 text-white px-3 py-2 font-mono text-xs font-bold">autores (a)</div>
+                        <div class="p-2.5 space-y-1 text-[11px] font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-1.5 rounded font-bold">🔑 id_autor (PK)</div>
+                            <div class="bg-white border border-slate-200 p-1.5 rounded">nombre, nacionalidad</div>
+                        </div>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+                        <div class="bg-slate-800 text-white px-3 py-2 font-mono text-xs font-bold">libros (l)</div>
+                        <div class="p-2.5 space-y-1 text-[11px] font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-1.5 rounded font-bold">🔑 id_libro (PK)</div>
+                            <div class="bg-sky-50 border border-sky-200 p-1.5 rounded font-bold text-sky-900">🔗 id_autor (FK) → autores</div>
+                            <div class="bg-white border border-slate-200 p-1.5 rounded">titulo, anio_publicacion, genero</div>
+                        </div>
+                    </div>
+                    <div class="border-2 border-indigo-200 rounded-xl overflow-hidden bg-indigo-50/20">
+                        <div class="bg-indigo-600 text-white px-3 py-2 font-mono text-xs font-bold">prestamos (p)</div>
+                        <div class="p-2.5 space-y-1 text-[11px] font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-1.5 rounded font-bold">🔑 id_prestamo (PK)</div>
+                            <div class="bg-sky-50 border border-sky-200 p-1.5 rounded font-bold text-sky-900">🔗 id_libro (FK), id_usuario (FK)</div>
+                            <div class="bg-white border border-slate-200 p-1.5 rounded">fecha_prestamo, fecha_devolucion, estado</div>
+                        </div>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+                        <div class="bg-slate-800 text-white px-3 py-2 font-mono text-xs font-bold">usuarios (u)</div>
+                        <div class="p-2.5 space-y-1 text-[11px] font-mono">
+                            <div class="bg-amber-50 border border-amber-200 p-1.5 rounded font-bold">🔑 id_usuario (PK)</div>
+                            <div class="bg-white border border-slate-200 p-1.5 rounded">nombre, correo, telefono</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end">
+                    <button onclick="switchSection('laboratorio')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2 text-sm">
+                        <span>Siguiente: Laboratorio Visual de JOINs</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- SECCIÓN 2: LABORATORIO VISUAL DE JOINS                              -->
+        <!-- =================================================================== -->
+        <section id="sec-laboratorio" class="hidden space-y-6">
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <div class="max-w-3xl mb-6">
+                    <span class="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2">
+                        Paso 2 • Laboratorio Interactivo
+                    </span>
+                    <h2 class="text-2xl font-extrabold text-slate-900">¿Cómo funciona cada JOIN con datos reales?</h2>
+                    <p class="text-sm text-slate-600 mt-1">
+                        Selecciona cada tipo de JOIN de las diapositivas del Dr. Cristian Ordoñez. Observa el diagrama de Venn, la consulta SQL y <strong>qué filas exactas sobrevivirán</strong> al cruzar la Tabla A (Izquierda) con la Tabla B (Derecha).
+                    </p>
+                </div>
+
+                <!-- Botones Selectores de JOIN -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mb-8">
+                    <button onclick="selectJoinType('inner')" id="btn-join-inner" class="join-selector-btn p-3 rounded-xl border-2 border-indigo-600 bg-indigo-50 text-indigo-900 font-bold text-xs sm:text-sm text-center transition shadow-sm">
+                        INNER JOIN
+                        <span class="block text-[10px] font-normal text-indigo-600 mt-0.5">Solo coincidencias</span>
+                    </button>
+                    <button onclick="selectJoinType('left')" id="btn-join-left" class="join-selector-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 text-slate-700 font-bold text-xs sm:text-sm text-center transition">
+                        LEFT JOIN
+                        <span class="block text-[10px] font-normal text-slate-500 mt-0.5">Todo Izquierda (A)</span>
+                    </button>
+                    <button onclick="selectJoinType('right')" id="btn-join-right" class="join-selector-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 text-slate-700 font-bold text-xs sm:text-sm text-center transition">
+                        RIGHT JOIN
+                        <span class="block text-[10px] font-normal text-slate-500 mt-0.5">Todo Derecha (B)</span>
+                    </button>
+                    <button onclick="selectJoinType('full')" id="btn-join-full" class="join-selector-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 text-slate-700 font-bold text-xs sm:text-sm text-center transition">
+                        FULL OUTER JOIN
+                        <span class="block text-[10px] font-normal text-slate-500 mt-0.5">Todo A y B</span>
+                    </button>
+                    <button onclick="selectJoinType('left_null')" id="btn-join-left_null" class="join-selector-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 text-slate-700 font-bold text-xs sm:text-sm text-center transition">
+                        LEFT + IS NULL
+                        <span class="block text-[10px] font-normal text-rose-600 mt-0.5">Trampa de examen</span>
+                    </button>
+                    <button onclick="selectJoinType('right_null')" id="btn-join-right_null" class="join-selector-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 text-slate-700 font-bold text-xs sm:text-sm text-center transition">
+                        RIGHT + IS NULL
+                        <span class="block text-[10px] font-normal text-rose-600 mt-0.5">Trampa de examen</span>
+                    </button>
+                </div>
+
+                <!-- Panel Principal: Venn + Código + Explicación -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center bg-slate-50 p-5 rounded-2xl border border-slate-200 mb-8">
+                    <!-- SVG Venn Diagram -->
+                    <div class="lg:col-span-4 flex flex-col items-center justify-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <svg viewBox="0 0 260 160" class="w-full max-w-[240px] h-auto">
+                            <defs>
+                                <clipPath id="clipA">
+                                    <circle cx="95" cy="80" r="58" />
+                                </clipPath>
+                                <clipPath id="clipB">
+                                    <circle cx="165" cy="80" r="58" />
+                                </clipPath>
+                            </defs>
+                            
+                            <!-- Fondo base blanco círculos -->
+                            <circle cx="95" cy="80" r="58" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2" />
+                            <circle cx="165" cy="80" r="58" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2" />
+
+                            <!-- Zona Solo A -->
+                            <circle id="venn-only-a" cx="95" cy="80" r="58" fill="#ef4444" fill-opacity="0" class="venn-circle" />
+                            
+                            <!-- Zona Solo B -->
+                            <circle id="venn-only-b" cx="165" cy="80" r="58" fill="#ef4444" fill-opacity="0" class="venn-circle" />
+
+                            <!-- Zona Intersección (A recortado por B) -->
+                            <g clip-path="url(#clipB)">
+                                <circle id="venn-intersect" cx="95" cy="80" r="58" fill="#ef4444" fill-opacity="0.85" class="venn-circle" />
+                            </g>
+
+                            <!-- Bordes limpios -->
+                            <circle cx="95" cy="80" r="58" fill="none" stroke="#1e293b" stroke-width="2.5" />
+                            <circle cx="165" cy="80" r="58" fill="none" stroke="#1e293b" stroke-width="2.5" />
+
+                            <!-- Etiquetas -->
+                            <text x="65" y="85" font-family="Inter, sans-serif" font-weight="800" font-size="16" fill="#0f172a">A</text>
+                            <text x="183" y="85" font-family="Inter, sans-serif" font-weight="800" font-size="16" fill="#0f172a">B</text>
+                            <text x="95" y="152" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="10" fill="#64748b">estudiantes (Izq)</text>
+                            <text x="165" y="152" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="10" fill="#64748b">inscripciones (Der)</text>
+                        </svg>
+                        <span id="venn-caption" class="text-xs font-bold text-slate-700 mt-1 text-center">Intersección exacta (A ∩ B)</span>
+                    </div>
+
+                    <!-- Código y Explicación -->
+                    <div class="lg:col-span-8 space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <h3 id="join-title" class="text-xl font-extrabold text-slate-900">INNER JOIN</h3>
+                                <span id="join-badge" class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-1 rounded-lg">El más usado</span>
+                            </div>
+                            <p id="join-desc" class="text-sm text-slate-700 leading-relaxed">
+                                Busca coincidencias exactas entre ambas tablas usando la columna en común (<code>id_estudiante</code>). Si un estudiante no está inscrito, <strong>no aparece</strong>. Si una inscripción no tiene estudiante válido, tampoco aparece.
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-900 rounded-xl p-4 font-mono text-xs sm:text-sm text-slate-200 overflow-x-auto">
+                            <pre id="join-code">SELECT e.id_estudiante, e.nombre, i.id_curso, i.nota_final
+FROM estudiantes e
+INNER JOIN inscripciones i ON e.id_estudiante = i.id_estudiante;</pre>
+                        </div>
+
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex items-start gap-2.5">
+                            <span class="text-base">💡</span>
+                            <div id="join-exam-cue">
+                                <strong>Palabras clave del profesor en el examen:</strong> "Muestra los estudiantes <em>que están inscritos</em>...", "Lista los alumnos <em>con sus respectivas notas</em>".
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tablas de Datos Visuales: Entrada vs Resultado -->
+                <div>
+                    <h4 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-3">Simulación en tiempo real con datos de ejemplo</h4>
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                        <!-- Tabla A -->
+                        <div class="lg:col-span-3 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+                            <div class="bg-slate-100 px-3 py-2 border-b border-slate-200 font-mono text-xs font-bold text-slate-700">
+                                Tabla A: estudiantes (Izq)
+                            </div>
+                            <table class="w-full text-xs text-left">
+                                <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                    <tr>
+                                        <th class="p-2">id_est</th>
+                                        <th class="p-2">nombre</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 font-mono">
+                                    <tr class="bg-emerald-50/40"><td class="p-2 font-bold">1</td><td class="p-2 font-sans">Ana</td></tr>
+                                    <tr class="bg-emerald-50/40"><td class="p-2 font-bold">2</td><td class="p-2 font-sans">Luis</td></tr>
+                                    <tr class="bg-rose-50/50"><td class="p-2 font-bold">3</td><td class="p-2 font-sans">Sofía <span class="text-[10px] text-rose-600">(sin curso)</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Tabla B -->
+                        <div class="lg:col-span-4 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+                            <div class="bg-slate-100 px-3 py-2 border-b border-slate-200 font-mono text-xs font-bold text-slate-700">
+                                Tabla B: inscripciones (Der)
+                            </div>
+                            <table class="w-full text-xs text-left">
+                                <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                    <tr>
+                                        <th class="p-2">id_insc</th>
+                                        <th class="p-2">id_est (FK)</th>
+                                        <th class="p-2">curso</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 font-mono">
+                                    <tr class="bg-emerald-50/40"><td class="p-2">101</td><td class="p-2 font-bold">1</td><td class="p-2 font-sans">Bases de Datos</td></tr>
+                                    <tr class="bg-emerald-50/40"><td class="p-2">102</td><td class="p-2 font-bold">2</td><td class="p-2 font-sans">Algoritmos</td></tr>
+                                    <tr class="bg-amber-50/60"><td class="p-2">103</td><td class="p-2 font-bold text-amber-700">99</td><td class="p-2 font-sans">Redes <span class="text-[10px] text-amber-700">(huérfana)</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Resultado Resultante -->
+                        <div class="lg:col-span-5 bg-white border-2 border-indigo-500 rounded-xl overflow-hidden shadow-md">
+                            <div class="bg-indigo-600 px-3 py-2 font-mono text-xs font-bold text-white flex justify-between items-center">
+                                <span>RESULTADO DE LA CONSULTA</span>
+                                <span id="result-row-count" class="bg-indigo-800 px-2 py-0.5 rounded text-[10px]">2 filas</span>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-xs text-left">
+                                    <thead class="bg-indigo-50 text-indigo-900 border-b border-indigo-100 font-mono">
+                                        <tr>
+                                            <th class="p-2">e.id</th>
+                                            <th class="p-2">e.nombre</th>
+                                            <th class="p-2">i.id_est</th>
+                                            <th class="p-2">i.curso</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="join-result-tbody" class="divide-y divide-slate-100 font-mono">
+                                        <!-- Se llena dinámicamente con JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end">
+                    <button onclick="switchSection('simulador')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2 text-sm">
+                        <span>Ir al Simulador de Examen en Vivo</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- SECCIÓN 3: SIMULADOR INTERACTIVO DE EXAMEN (12 RETOS DE TALLERES)   -->
+        <!-- =================================================================== -->
+        <section id="sec-simulador" class="hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- Columna Izquierda: Retos del Profesor -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                        <div class="flex items-center justify-between mb-3">
+                            <span id="chal-domain-badge" class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-1 rounded-full">BD: Universidad</span>
+                            <span id="progress-badge" class="text-xs font-bold text-slate-500">Reto 1 de 12</span>
+                        </div>
+                        
+                        <!-- Selector de los 12 Retos organizados por tema -->
+                        <div class="grid grid-cols-3 sm:grid-cols-4 gap-1.5 mb-4">
+                            <button onclick="loadChallenge(0)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-indigo-600 text-white text-center">1. INNER 2T</button>
+                            <button onclick="loadChallenge(1)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">2. INNER 3T</button>
+                            <button onclick="loadChallenge(2)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">3. LEFT JOIN</button>
+                            <button onclick="loadChallenge(3)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">4. Sin alumnos</button>
+                            <button onclick="loadChallenge(4)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">5. RIGHT JOIN</button>
+                            <button onclick="loadChallenge(5)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">6. FULL JOIN</button>
+                            <button onclick="loadChallenge(6)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">7. Banco 3T</button>
+                            <button onclick="loadChallenge(7)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">8. JOIN+GROUP</button>
+                            <button onclick="loadChallenge(8)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">9. Banco COUNT</button>
+                            <button onclick="loadChallenge(9)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">10. Subconsulta</button>
+                            <button onclick="loadChallenge(10)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">11. Libros NULL</button>
+                            <button onclick="loadChallenge(11)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">12. HAVING</button>
+                        </div>
+
+                        <div class="bg-slate-50 border-l-4 border-indigo-600 p-4 rounded-r-xl mb-4">
+                            <p class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 mb-1">Enunciado real de examen / taller:</p>
+                            <h3 id="chal-prompt" class="text-sm sm:text-base font-bold text-slate-900 leading-snug">
+                                "Muestra el nombre de los estudiantes y su nota final, únicamente de aquellos que tengan inscripciones registradas."
+                            </h3>
+                        </div>
+
+                        <div class="space-y-2 text-xs text-slate-600">
+                            <p><strong>Columnas esperadas:</strong> <code id="chal-cols" class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-800">e.nombre, i.nota_final</code></p>
+                            <div id="chal-hint-box" class="hidden bg-amber-50 border border-amber-200 text-amber-900 p-3 rounded-xl mt-2">
+                                <strong>Pista paso a paso:</strong> <span id="chal-hint-text"></span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex gap-2">
+                            <button onclick="toggleHint()" class="text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-3 py-2 rounded-xl transition">
+                                💡 Ver Pista
+                            </button>
+                            <button onclick="showSolution()" class="text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-xl transition">
+                                👀 Ver Solución Modelo
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Esquema dinámico según el reto seleccionado -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+                        <h4 id="sim-schema-title" class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2.5">Tablas disponibles en este reto (BD Universidad)</h4>
+                        <div id="sim-schema-list" class="space-y-2 font-mono text-xs">
+                            <!-- Se actualiza dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Editor SQL y Consola de Resultados -->
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="bg-slate-900 rounded-2xl p-5 shadow-lg border border-slate-800">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                                <span class="text-xs font-mono text-slate-400 ml-2">consulta_examen.sql</span>
+                            </div>
+                            <button onclick="clearEditor()" class="text-xs text-slate-400 hover:text-white transition">Limpiar</button>
+                        </div>
+
+                        <!-- Botones rápidos de ayuda sintáctica -->
+                        <div class="flex flex-wrap gap-1.5 mb-3">
+                            <button onclick="insertSnippet('SELECT ')" class="bg-slate-800 hover:bg-slate-700 text-purple-300 font-mono text-xs px-2 py-1 rounded-md border border-slate-700">SELECT</button>
+                            <button onclick="insertSnippet('FROM ')" class="bg-slate-800 hover:bg-slate-700 text-purple-300 font-mono text-xs px-2 py-1 rounded-md border border-slate-700">FROM</button>
+                            <button onclick="insertSnippet('INNER JOIN ')" class="bg-slate-800 hover:bg-slate-700 text-sky-300 font-mono text-xs px-2 py-1 rounded-md border border-slate-700">INNER JOIN</button>
+                            <button onclick="insertSnippet('LEFT JOIN ')" class="bg-slate-800 hover:bg-slate-700 text-sky-300 font-mono text-xs px-2 py-1 rounded-md border border-slate-700">LEFT JOIN</button>
+                            <button onclick="insertSnippet('RIGHT JOIN ')" class="bg-slate-800 hover:bg-slate-700 text-sky-300 font-mono text-xs px-2 py-1 rounded-md border border-slate-700">RIGHT JOIN</button>
+                            <button onclick="insertSnippet('FULL OUTER JOIN ')" class="bg-slate-800 hover:bg-slate-700 text-sky-300 font-mono text-xs px-2 py-1 rounded-md border border-slate-700">FULL JOIN</button>
+                            <button onclick="insertSnippet('ON ')" class="bg-slate-800 hover:bg-slate-700 text-amber-300 font-mono text-xs px-2 py-1 rounded-md border border-slate-700">ON</button>
+                            <button onclick="insertSnippet('WHERE ')" class="bg-slate-800 hover:bg-slate-700 text-rose-300 font-mono text-xs px-2 py-1 rounded-md border border-slate-700">WHERE</button>
+                            <button onclick="insertSnippet('GROUP BY ')" class="bg-slate-800 hover:bg-slate-700 text-emerald-300 font-mono text-xs px-2 py-1 rounded-md border border-slate-700">GROUP BY</button>
+                            <button onclick="insertSnippet('HAVING ')" class="bg-slate-800 hover:bg-slate-700 text-pink-300 font-mono text-xs px-2 py-1 rounded-md border border-slate-700">HAVING</button>
+                            <button onclick="insertSnippet('ORDER BY ')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs px-2 py-1 rounded-md border border-slate-700">ORDER BY</button>
+                        </div>
+
+                        <textarea id="sql-editor" rows="7" spellcheck="false" placeholder="Escribe aquí tu consulta SQL...&#10;Ejemplo:&#10;SELECT e.nombre, i.nota_final&#10;FROM estudiantes e&#10;INNER JOIN inscripciones i ON e.id_estudiante = i.id_estudiante;" class="w-full bg-slate-950 text-emerald-300 font-mono text-sm p-4 rounded-xl border border-slate-800 focus:outline-none focus:border-indigo-500 resize-y leading-relaxed"></textarea>
+
+                        <div class="mt-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+                            <span class="text-xs text-slate-400">Presiona Ejecutar para validar tu lógica como lo haría el motor SQL</span>
+                            <button onclick="runQuery()" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-extrabold px-6 py-2.5 rounded-xl shadow-md transition flex items-center justify-center gap-2 text-sm">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                                <span>Ejecutar y Evaluar Consulta</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Panel de Feedback y Tabla de Resultados -->
+                    <div id="eval-feedback-box" class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                        <div class="flex items-center gap-2 text-slate-500 text-sm">
+                            <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>Escribe tu consulta arriba y haz clic en <strong>Ejecutar y Evaluar Consulta</strong> para ver los resultados.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- SECCIÓN 4: ESTRATEGIA PARA EL EXAMEN FRENTE AL PROFESOR             -->
+        <!-- =================================================================== -->
+        <section id="sec-estrategia" class="hidden space-y-6">
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+                <span class="inline-block bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2">
+                    Paso 4 • Protocolo Anti-Bloqueo
+                </span>
+                <h2 class="text-2xl font-extrabold text-slate-900 mb-2">Qué hacer exactamente cuando pases al puesto del profesor</h2>
+                <p class="text-sm text-slate-600 mb-6">Cuando el profesor está mirando tu pantalla es normal ponerse nervioso. Sigue estos 5 pasos mecánicos en orden y nunca te quedarás en blanco.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Paso 1 -->
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white font-extrabold flex items-center justify-center text-sm">1</span>
+                            <h3 class="font-bold text-slate-900">No escribas SQL todavía: mira las tablas</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Identifica en el diagrama o gestor qué tablas tienen los datos que te piden. Si te piden datos de dos tablas que no se tocan directamente (ej. <code>estudiantes</code> y <code>cursos</code>), busca la <strong>tabla intermedia</strong> que tiene las dos llaves foráneas (<code>inscripciones</code>).
+                        </p>
+                    </div>
+
+                    <!-- Paso 2 -->
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white font-extrabold flex items-center justify-center text-sm">2</span>
+                            <h3 class="font-bold text-slate-900">Traduce la frase del profesor a tipo de JOIN</h3>
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-1.5">
+                            <li>• <em>"Muestra X con su Y"</em> → <strong>INNER JOIN</strong></li>
+                            <li>• <em>"Muestra TODOS los X, tengan o no Y"</em> → <strong>LEFT JOIN</strong> (poniendo X en el <code>FROM</code>)</li>
+                            <li>• <em>"Muestra los X que NO tienen Y"</em> → <strong>LEFT JOIN</strong> + <code>WHERE Y.id IS NULL</code></li>
+                            <li>• <em>"Muestra todos de ambas tablas"</em> → <strong>FULL OUTER JOIN</strong></li>
+                        </ul>
+                    </div>
+
+                    <!-- Paso 3 -->
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white font-extrabold flex items-center justify-center text-sm">3</span>
+                            <h3 class="font-bold text-slate-900">Escribe primero el FROM y los JOIN</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Pon <code>SELECT *</code> temporalmente, arma tu <code>FROM tabla1 t1</code> y encadena tus <code>JOIN tabla2 t2 ON t1.pk = t2.fk</code>. Ejecuta eso primero para comprobar que no haya errores de sintaxis.
+                        </p>
+                    </div>
+
+                    <!-- Paso 4 -->
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white font-extrabold flex items-center justify-center text-sm">4</span>
+                            <h3 class="font-bold text-slate-900">Reemplaza el * por las columnas exactas</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Cambia el <code>*</code> por las columnas que pidió el enunciado usando siempre el alias adelante (ej: <code>e.nombre, c.nombre_curso</code>). Revisa que no falte ninguna coma entre columnas ni sobre una antes del <code>FROM</code>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Errores típicos a evitar -->
+                <div class="mt-6 bg-rose-50 border border-rose-200 rounded-2xl p-5">
+                    <h3 class="text-base font-bold text-rose-900 mb-3 flex items-center gap-2">
+                        <span>🚨</span> Los 4 errores que más hacen perder puntos frente al profesor
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-rose-900">
+                        <div class="bg-white/80 p-3 rounded-xl border border-rose-100">
+                            <strong>1. Olvidar el ON:</strong> Todo <code>INNER/LEFT/RIGHT/FULL JOIN</code> exige un <code>ON tabla1.llave = tabla2.llave</code>. Sin el <code>ON</code> da error de sintaxis.
+                        </div>
+                        <div class="bg-white/80 p-3 rounded-xl border border-rose-100">
+                            <strong>2. Igualar columnas que no son llaves:</strong> Nunca hagas <code>ON e.nombre = c.nombre_curso</code>. Siempre iguala <strong>PK con FK</strong> (<code>e.id_estudiante = i.id_estudiante</code>).
+                        </div>
+                        <div class="bg-white/80 p-3 rounded-xl border border-rose-100">
+                            <strong>3. Columna ambigua:</strong> Si escribes <code>SELECT id_estudiante</code> sin poner <code>e.id_estudiante</code>, SQL dirá <em>"Column 'id_estudiante' is ambiguous"</em>.
+                        </div>
+                        <div class="bg-white/80 p-3 rounded-xl border border-rose-100">
+                            <strong>4. Usar INNER JOIN cuando piden "TODOS":</strong> Si te dicen <em>"todos los cursos, incluso sin inscritos"</em> y usas <code>INNER JOIN</code>, los cursos vacíos desaparecerán.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // =========================================================================
+        // 1. NAVEGACIÓN ENTRE PESTAÑAS PRINCIPALES
+        // =========================================================================
+        function switchSection(sectionId) {
+            const sections = ['fundamentos', 'laboratorio', 'simulador', 'estrategia'];
+            sections.forEach(id => {
+                document.getElementById(`sec-${id}`).classList.add('hidden');
+                const btn = document.getElementById(`nav-${id}`);
+                btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
+                btn.classList.add('text-slate-600');
+            });
+
+            document.getElementById(`sec-${sectionId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`nav-${sectionId}`);
+            activeBtn.classList.remove('text-slate-600');
+            activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
+        }
+
+        // =========================================================================
+        // 2. EXPLICACIÓN INTERACTIVA DE ANATOMÍA SQL Y ESQUEMAS (SECCIÓN 1)
+        // =========================================================================
+        const anatomyData = {
+            select: {
+                num: '1',
+                color: 'indigo',
+                title: 'SELECT (¿Qué columnas o cálculos quieres ver?)',
+                desc: 'Aquí escribes las columnas que pidió el profesor separadas por comas. Puedes usar <code>AS</code> para ponerle un alias a una columna calculada, o funciones como <code>COUNT()</code>, <code>SUM()</code>, <code>AVG()</code>, <code>MIN()</code>, <code>MAX()</code>.',
+                tip: '<strong>Tip vital:</strong> Si usas una función como <code>COUNT(...)</code> junto con una columna normal como <code>s.nombre</code>, ¡estás obligado a poner <code>GROUP BY s.nombre</code> más abajo!'
+            },
+            from: {
+                num: '2',
+                color: 'sky',
+                title: 'FROM (¿Cuál es tu tabla principal / izquierda?)',
+                desc: 'Indica la tabla base desde donde arranca la consulta. Cuando uses <strong>LEFT JOIN</strong>, esta tabla será la que tiene prioridad y se mostrará completa.',
+                tip: '<strong>Tip vital:</strong> Al escribir <code>FROM sucursales s</code>, defines el alias corto <code>s</code> para usarlo en todo el resto de la consulta y evitar ambigüedades.'
+            },
+            join: {
+                num: '3',
+                color: 'emerald',
+                title: 'JOIN + ON (¿Cómo se conectan las tablas?)',
+                desc: 'Une otra tabla indicando con <code>ON</code> cuál es la columna puente (Llave Primaria = Llave Foránea). Puedes encadenar varios JOIN seguidos para cruzar 3 o más tablas.',
+                tip: '<strong>Regla de oro:</strong> Cada <code>JOIN</code> lleva su propio <code>ON</code> justo debajo. Si unes 3 tablas, tendrás 2 cláusulas <code>JOIN</code> y 2 cláusulas <code>ON</code>.'
+            },
+            where: {
+                num: '4',
+                color: 'amber',
+                title: 'WHERE (Filtros ANTES de agrupar)',
+                desc: 'Filtra fila por fila antes de hacer grupos. Soporta <code>=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>AND</code>, <code>OR</code>, <code>LIKE</code>, <code>IS NULL</code> y subconsultas como <code>WHERE saldo &gt; (SELECT AVG(saldo) FROM cuentas)</code>.',
+                tip: '<strong>Cuidado:</strong> En <code>WHERE</code> NO puedes usar funciones de agregación directamente (ej. <code>WHERE COUNT(*) &gt; 1</code> da error; para eso existe <code>HAVING</code>).'
+            },
+            groupby: {
+                num: '5',
+                color: 'purple',
+                title: 'GROUP BY (Agrupar filas con valores iguales)',
+                desc: 'Agrupa filas que comparten un mismo valor (ej. por ciudad, por sucursal o por tipo de cuenta) para calcular totales, conteos o promedios por cada grupo.',
+                tip: '<strong>Regla de oro de PostgreSQL:</strong> Toda columna normal que aparezca en el <code>SELECT</code> (que no esté dentro de COUNT/SUM/AVG) DEBE aparecer en el <code>GROUP BY</code>.'
+            },
+            having: {
+                num: '6',
+                color: 'pink',
+                title: 'HAVING (Filtros DESPUÉS de agrupar)',
+                desc: 'Es como un <code>WHERE</code> pero para grupos ya formados. Se usa exclusivamente cuando quieres filtrar el resultado de un <code>COUNT</code>, <code>SUM</code> o <code>AVG</code> (ej: <code>HAVING COUNT(*) &gt; 1</code>).',
+                tip: '<strong>Diferencia clave (Diap. 15 Clase 6):</strong> <code>WHERE</code> filtra filas individuales; <code>HAVING</code> filtra grupos.'
+            },
+            orderby: {
+                num: '7',
+                color: 'slate',
+                title: 'ORDER BY (Ordenar el resultado final)',
+                desc: 'Siempre va al final de la consulta. Ordena de menor a mayor (<code>ASC</code>, por defecto) o de mayor a menor (<code>DESC</code>).',
+                tip: '<strong>Ejemplo del Lab Banco:</strong> <code>ORDER BY ciudad ASC</code> o <code>ORDER BY total_emp DESC</code>.'
+            }
+        };
+
+        function explainPart(partKey) {
+            const item = anatomyData[partKey];
+            const box = document.getElementById('anatomy-explanation');
+            box.innerHTML = `
+                <div class="flex items-center gap-2 text-${item.color}-700 font-bold text-sm mb-2">
+                    <span class="w-6 h-6 rounded-full bg-${item.color}-600 text-white flex items-center justify-center text-xs">${item.num}</span>
+                    <span>${item.title}</span>
+                </div>
+                <p class="text-sm text-slate-700 leading-relaxed mb-3">${item.desc}</p>
+                <div class="bg-white p-3 rounded-lg border border-${item.color}-100 text-xs text-slate-600">${item.tip}</div>
+            `;
+        }
+
+        function switchSchema(sch) {
+            ['uni', 'banco', 'biblio'].forEach(k => {
+                document.getElementById(`schema-${k}`).classList.add('hidden');
+                const btn = document.getElementById(`sch-btn-${k}`);
+                btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-xs');
+                btn.classList.add('text-slate-600');
+            });
+            document.getElementById(`schema-${sch}`).classList.remove('hidden');
+            const active = document.getElementById(`sch-btn-${sch}`);
+            active.classList.remove('text-slate-600');
+            active.classList.add('bg-white', 'text-indigo-600', 'shadow-xs');
+        }
+
+        // =========================================================================
+        // 3. LABORATORIO VISUAL DE JOINS (SECCIÓN 2)
+        // =========================================================================
+        const joinConfigs = {
+            inner: {
+                title: 'INNER JOIN',
+                badge: 'El más usado',
+                badgeClass: 'bg-indigo-100 text-indigo-800',
+                venn: { onlyA: 0, onlyB: 0, intersect: 0.85, caption: 'Intersección exacta (A ∩ B)' },
+                desc: 'Busca coincidencias exactas entre ambas tablas usando la columna en común (<code>id_estudiante</code>). Si un estudiante no está inscrito, <strong>no aparece</strong>. Si una inscripción no tiene estudiante válido, tampoco aparece.',
+                code: `SELECT e.id_estudiante, e.nombre, i.id_est, i.curso\nFROM estudiantes e\nINNER JOIN inscripciones i ON e.id_estudiante = i.id_est;`,
+                cue: '<strong>Palabras clave del profesor:</strong> "Muestra los estudiantes <em>que están inscritos</em>...", "Lista los alumnos <em>con sus respectivas notas</em>".',
+                rows: [
+                    ['1', 'Ana', '1', 'Bases de Datos'],
+                    ['2', 'Luis', '2', 'Algoritmos']
+                ]
+            },
+            left: {
+                title: 'LEFT JOIN (LEFT OUTER JOIN)',
+                badge: 'Prioridad Tabla Izquierda',
+                badgeClass: 'bg-sky-100 text-sky-800',
+                venn: { onlyA: 0.75, onlyB: 0, intersect: 0.9, caption: 'Todo A + coincidencias en B' },
+                desc: 'Conserva <strong>TODAS las filas de la tabla izquierda</strong> (<code>estudiantes</code>). Si un estudiante (como Sofía) no tiene coincidencia en <code>inscripciones</code>, aparece igual con <code>NULL</code> en las columnas de la derecha.',
+                code: `SELECT e.id_estudiante, e.nombre, i.id_est, i.curso\nFROM estudiantes e\nLEFT JOIN inscripciones i ON e.id_estudiante = i.id_est;`,
+                cue: '<strong>Palabras clave del profesor:</strong> "Muestra <em>todos los estudiantes</em>, estén o no inscritos en cursos".',
+                rows: [
+                    ['1', 'Ana', '1', 'Bases de Datos'],
+                    ['2', 'Luis', '2', 'Algoritmos'],
+                    ['3', 'Sofía', 'NULL', 'NULL']
+                ]
+            },
+            right: {
+                title: 'RIGHT JOIN (RIGHT OUTER JOIN)',
+                badge: 'Prioridad Tabla Derecha',
+                badgeClass: 'bg-emerald-100 text-emerald-800',
+                venn: { onlyA: 0, onlyB: 0.75, intersect: 0.9, caption: 'Todo B + coincidencias en A' },
+                desc: 'Conserva <strong>TODAS las filas de la tabla derecha</strong> (<code>inscripciones</code>). Si una inscripción (como Redes con <code>id_est = 99</code>) no encuentra estudiante a la izquierda, muestra <code>NULL</code> en los datos del estudiante.',
+                code: `SELECT e.id_estudiante, e.nombre, i.id_est, i.curso\nFROM estudiantes e\nRIGHT JOIN inscripciones i ON e.id_estudiante = i.id_est;`,
+                cue: '<strong>Palabras clave del profesor:</strong> "Muestra <em>todas las inscripciones</em> y el nombre del estudiante si existe".',
+                rows: [
+                    ['1', 'Ana', '1', 'Bases de Datos'],
+                    ['2', 'Luis', '2', 'Algoritmos'],
+                    ['NULL', 'NULL', '99', 'Redes']
+                ]
+            },
+            full: {
+                title: 'FULL OUTER JOIN',
+                badge: 'Unión Total',
+                badgeClass: 'bg-purple-100 text-purple-800',
+                venn: { onlyA: 0.75, onlyB: 0.75, intersect: 0.9, caption: 'Todo A y Todo B (A ∪ B)' },
+                desc: 'Combina <code>LEFT JOIN</code> y <code>RIGHT JOIN</code>. Muestra todas las filas de ambas tablas, rellenando con <code>NULL</code> en el lado donde falte coincidencia.',
+                code: `SELECT e.id_estudiante, e.nombre, i.id_est, i.curso\nFROM estudiantes e\nFULL OUTER JOIN inscripciones i ON e.id_estudiante = i.id_est;`,
+                cue: '<strong>Palabras clave del profesor:</strong> "Muestra <em>todos los estudiantes y todas las inscripciones</em>, tengan coincidencia o no".',
+                rows: [
+                    ['1', 'Ana', '1', 'Bases de Datos'],
+                    ['2', 'Luis', '2', 'Algoritmos'],
+                    ['3', 'Sofía', 'NULL', 'NULL'],
+                    ['NULL', 'NULL', '99', 'Redes']
+                ]
+            },
+            left_null: {
+                title: 'LEFT JOIN + WHERE B.clave IS NULL',
+                badge: 'Exclusión Izquierda',
+                badgeClass: 'bg-rose-100 text-rose-800',
+                venn: { onlyA: 0.85, onlyB: 0, intersect: 0, caption: 'Solo A sin pareja en B (A - B)' },
+                desc: 'Trae todos los registros de la izquierda y luego descarta los que sí hicieron match, dejando <strong>únicamente los registros de A que NO tienen relación en B</strong> (Sofía, que no tiene ningún curso).',
+                code: `SELECT e.id_estudiante, e.nombre, i.id_est, i.curso\nFROM estudiantes e\nLEFT JOIN inscripciones i ON e.id_estudiante = i.id_est\nWHERE i.id_est IS NULL;`,
+                cue: '<strong>Palabras clave del profesor:</strong> "Muestra los estudiantes <em>que NO están inscritos en ningún curso</em>" o "cursos <em>sin estudiantes</em>".',
+                rows: [
+                    ['3', 'Sofía', 'NULL', 'NULL']
+                ]
+            },
+            right_null: {
+                title: 'RIGHT JOIN + WHERE A.clave IS NULL',
+                badge: 'Exclusión Derecha',
+                badgeClass: 'bg-rose-100 text-rose-800',
+                venn: { onlyA: 0, onlyB: 0.85, intersect: 0, caption: 'Solo B sin pareja en A (B - A)' },
+                desc: 'Deja <strong>únicamente los registros de la tabla derecha que NO tienen coincidencia en la izquierda</strong> (la inscripción huérfana #103 de Redes).',
+                code: `SELECT e.id_estudiante, e.nombre, i.id_est, i.curso\nFROM estudiantes e\nRIGHT JOIN inscripciones i ON e.id_estudiante = i.id_est\nWHERE e.id_estudiante IS NULL;`,
+                cue: '<strong>Palabras clave del profesor:</strong> "Muestra las inscripciones <em>que no tienen estudiante asociado</em>".',
+                rows: [
+                    ['NULL', 'NULL', '99', 'Redes']
+                ]
+            }
+        };
+
+        function selectJoinType(type) {
+            const cfg = joinConfigs[type];
+            if (!cfg) return;
+
+            document.querySelectorAll('.join-selector-btn').forEach(btn => {
+                btn.classList.remove('border-indigo-600', 'bg-indigo-50', 'text-indigo-900', 'shadow-sm');
+                btn.classList.add('border-slate-200', 'bg-white', 'text-slate-700');
+            });
+            const activeBtn = document.getElementById(`btn-join-${type}`);
+            activeBtn.classList.remove('border-slate-200', 'bg-white', 'text-slate-700');
+            activeBtn.classList.add('border-indigo-600', 'bg-indigo-50', 'text-indigo-900', 'shadow-sm');
+
+            document.getElementById('venn-only-a').setAttribute('fill-opacity', cfg.venn.onlyA);
+            document.getElementById('venn-only-b').setAttribute('fill-opacity', cfg.venn.onlyB);
+            document.getElementById('venn-intersect').setAttribute('fill-opacity', cfg.venn.intersect);
+            document.getElementById('venn-caption').textContent = cfg.venn.caption;
+
+            document.getElementById('join-title').textContent = cfg.title;
+            const badge = document.getElementById('join-badge');
+            badge.textContent = cfg.badge;
+            badge.className = `text-xs font-bold px-2.5 py-1 rounded-lg ${cfg.badgeClass}`;
+            document.getElementById('join-desc').innerHTML = cfg.desc;
+            document.getElementById('join-code').textContent = cfg.code;
+            document.getElementById('join-exam-cue').innerHTML = cfg.cue;
+
+            const tbody = document.getElementById('join-result-tbody');
+            tbody.innerHTML = cfg.rows.map(row => `
+                <tr>
+                    ${row.map(cell => cell === 'NULL'
+                        ? `<td class="p-2 text-rose-600 font-bold bg-rose-50/40">NULL</td>`
+                        : `<td class="p-2 text-slate-800">${cell}</td>`
+                    ).join('')}
+                </tr>
+            `).join('');
+            document.getElementById('result-row-count').textContent = `${cfg.rows.length} ${cfg.rows.length === 1 ? 'fila' : 'filas'}`;
+        }
+
+        // =========================================================================
+        // 4. SIMULADOR DE EXAMEN INTERACTIVO (12 RETOS DE TALLERES REALES)
+        // =========================================================================
+        const schemaTemplates = {
+            uni: {
+                title: 'Tablas disponibles en este reto (BD Universidad)',
+                badge: 'BD: Universidad',
+                html: `
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">estudiantes (e):</span> <span class="text-slate-600">id_estudiante (PK), nombre, apellido, correo, edad, ciudad</span></div>
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">inscripciones (i):</span> <span class="text-slate-600">id_inscripcion (PK), id_estudiante (FK), id_curso (FK), fecha_inscripcion, nota_final</span></div>
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">cursos (c):</span> <span class="text-slate-600">id_curso (PK), nombre_curso, duracion, docente</span></div>
+                `
+            },
+            banco: {
+                title: 'Tablas disponibles en este reto (BD Banco - Lab Final)',
+                badge: 'BD: bancodb',
+                html: `
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">clientes (cl):</span> <span class="text-slate-600">id_cliente (PK), nombre, apellido, telefono, correo, ciudad</span></div>
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">cuentas (cu):</span> <span class="text-slate-600">id_cuenta (PK), numero_cuenta, saldo, fecha_apertura, estado, id_cliente (FK), id_tipo (FK)</span></div>
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">tipos_cuenta (tc):</span> <span class="text-slate-600">id_tipo (PK), descripcion ('Ahorros', 'Corriente')</span></div>
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">transacciones (tr):</span> <span class="text-slate-600">id_transaccion (PK), tipo, monto, fecha, id_cuenta (FK)</span></div>
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">sucursales (su) / empleados (em):</span> <span class="text-slate-600">su(id_sucursal, nombre, ciudad) | em(id_empleado, nombre, cargo, salario, id_sucursal)</span></div>
+                `
+            },
+            biblio: {
+                title: 'Tablas disponibles en este reto (BD Biblioteca)',
+                badge: 'BD: Biblioteca',
+                html: `
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">autores (a):</span> <span class="text-slate-600">id_autor (PK), nombre, nacionalidad</span></div>
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">libros (l):</span> <span class="text-slate-600">id_libro (PK), titulo, anio_publicacion, id_autor (FK), genero</span></div>
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">prestamos (p):</span> <span class="text-slate-600">id_prestamo (PK), id_libro (FK), id_usuario (FK), fecha_prestamo, fecha_devolucion</span></div>
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">usuarios (u):</span> <span class="text-slate-600">id_usuario (PK), nombre, correo, telefono</span></div>
+                `
+            }
+        };
+
+        const challenges = [
+            {
+                schema: 'uni',
+                prompt: '"Muestra el nombre de los estudiantes y su nota final, únicamente de aquellos que tengan inscripciones registradas."',
+                cols: 'e.nombre, i.nota_final',
+                hint: 'Usa INNER JOIN entre estudiantes (e) e inscripciones (i) igualando e.id_estudiante = i.id_estudiante.',
+                solution: `SELECT e.nombre, i.nota_final\nFROM estudiantes e\nINNER JOIN inscripciones i ON e.id_estudiante = i.id_estudiante;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('select')) return { ok: false, msg: 'Falta la cláusula SELECT al inicio.' };
+                    if (!s.includes('nombre') || !s.includes('nota_final')) return { ok: false, msg: 'Debes seleccionar las columnas nombre y nota_final.' };
+                    if (!s.includes('estudiantes') || !s.includes('inscripciones')) return { ok: false, msg: 'Debes involucrar las tablas estudiantes e inscripciones.' };
+                    if (!s.includes('join')) return { ok: false, msg: 'Necesitas usar INNER JOIN (o JOIN) para unir ambas tablas.' };
+                    if (s.includes('left join') || s.includes('right join') || s.includes('full')) return { ok: false, msg: 'Cuidado: el profesor pidió ÚNICAMENTE los que tienen inscripciones. Usa INNER JOIN.' };
+                    if (!s.includes('on ') || !s.includes('id_estudiante')) return { ok: false, msg: 'Falta la condición ON igualando id_estudiante de ambas tablas.' };
+                    return { ok: true, msg: '¡Excelente! Consulta perfecta de INNER JOIN entre 2 tablas.' };
+                },
+                previewHeaders: ['nombre', 'nota_final'],
+                previewRows: [
+                    ['Carlos', '4.5'],
+                    ['Maria', '4.0'],
+                    ['Carlos', '4.2']
+                ]
+            },
+            {
+                schema: 'uni',
+                prompt: '"Mostrar el nombre de los estudiantes, el nombre del curso en el que están inscritos y su fecha de inscripción."',
+                cols: 'e.nombre, c.nombre_curso, i.fecha_inscripcion',
+                hint: 'Necesitas conectar 3 tablas: empieza en estudiantes (e), haz INNER JOIN con inscripciones (i) y luego otro INNER JOIN con cursos (c).',
+                solution: `SELECT e.nombre, c.nombre_curso, i.fecha_inscripcion\nFROM estudiantes e\nINNER JOIN inscripciones i ON e.id_estudiante = i.id_estudiante\nINNER JOIN cursos c ON i.id_curso = c.id_curso;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('nombre') || !s.includes('nombre_curso') || !s.includes('fecha_inscripcion')) {
+                        return { ok: false, msg: 'Asegúrate de incluir las 3 columnas pedidas: nombre, nombre_curso y fecha_inscripcion.' };
+                    }
+                    if (!s.includes('estudiantes') || !s.includes('inscripciones') || !s.includes('cursos')) {
+                        return { ok: false, msg: 'Debes conectar las 3 tablas pasando por la tabla puente inscripciones.' };
+                    }
+                    const joinCount = (s.match(/join/g) || []).length;
+                    if (joinCount < 2) return { ok: false, msg: 'Para conectar 3 tablas necesitas encadenar 2 cláusulas INNER JOIN.' };
+                    if (!s.includes('id_estudiante') || !s.includes('id_curso')) {
+                        return { ok: false, msg: 'Verifica que ambos ON conecten id_estudiante e id_curso correctamente.' };
+                    }
+                    return { ok: true, msg: '¡Brillante! Encadenaste 3 tablas usando la tabla puente inscripciones.' };
+                },
+                previewHeaders: ['nombre', 'nombre_curso', 'fecha_inscripcion'],
+                previewRows: [
+                    ['Carlos', 'Bases de Datos', '2025-03-01'],
+                    ['Maria', 'Bases de Datos', '2025-03-02'],
+                    ['Carlos', 'Programacion Python', '2025-03-06']
+                ]
+            },
+            {
+                schema: 'uni',
+                prompt: '"Mostrar TODOS los estudiantes y el nombre del curso en el que están inscritos (si un estudiante no tiene cursos, como Daniel, igual debe aparecer)."',
+                cols: 'e.nombre, c.nombre_curso',
+                hint: 'Pon estudiantes (e) en el FROM y usa LEFT JOIN hacia inscripciones (i) y luego LEFT JOIN hacia cursos (c).',
+                solution: `SELECT e.nombre, c.nombre_curso\nFROM estudiantes e\nLEFT JOIN inscripciones i ON e.id_estudiante = i.id_estudiante\nLEFT JOIN cursos c ON i.id_curso = c.id_curso;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('left join')) return { ok: false, msg: 'Como te piden TODOS los estudiantes (incluso sin curso), debes usar LEFT JOIN.' };
+                    if (!s.includes('estudiantes') || !s.includes('inscripciones') || !s.includes('cursos')) {
+                        return { ok: false, msg: 'Debes cruzar estudiantes -> inscripciones -> cursos.' };
+                    }
+                    const leftCount = (s.match(/left join/g) || []).length;
+                    if (leftCount < 2) return { ok: false, msg: 'Recuerda usar LEFT JOIN en ambos cruces para no perder a los estudiantes sin inscripción.' };
+                    return { ok: true, msg: '¡Muy bien! Daniel Torres (id 7 del script) aparece con NULL en nombre_curso.' };
+                },
+                previewHeaders: ['nombre', 'nombre_curso'],
+                previewRows: [
+                    ['Carlos', 'Bases de Datos'],
+                    ['Maria', 'Bases de Datos'],
+                    ['Daniel', 'NULL']
+                ]
+            },
+            {
+                schema: 'uni',
+                prompt: '"Mostrar únicamente los cursos que NO tienen ningún estudiante inscrito (ej. Redes de Computadores)."',
+                cols: 'c.id_curso, c.nombre_curso',
+                hint: 'Empieza en cursos (c), haz LEFT JOIN con inscripciones (i) y filtra con WHERE i.id_curso IS NULL.',
+                solution: `SELECT c.id_curso, c.nombre_curso\nFROM cursos c\nLEFT JOIN inscripciones i ON c.id_curso = i.id_curso\nWHERE i.id_curso IS NULL;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('cursos') || !s.includes('inscripciones')) return { ok: false, msg: 'Debes cruzar cursos con inscripciones.' };
+                    if (!s.includes('left join') && !s.includes('right join')) return { ok: false, msg: 'Necesitas un LEFT JOIN (o RIGHT JOIN) para conservar los cursos vacíos antes de filtrar.' };
+                    if (!s.includes('is null')) return { ok: false, msg: 'Falta el filtro WHERE ... IS NULL para quedarte solo con los cursos sin inscritos.' };
+                    return { ok: true, msg: '¡Dominado! Esa es una pregunta favorita de examen para evaluar LEFT JOIN con exclusión.' };
+                },
+                previewHeaders: ['id_curso', 'nombre_curso'],
+                previewRows: [
+                    ['6', 'Redes de Computadores']
+                ]
+            },
+            {
+                schema: 'uni',
+                prompt: '"Usando RIGHT JOIN, muestra todas las inscripciones (fecha_inscripcion) junto con el nombre del estudiante."',
+                cols: 'e.nombre, i.fecha_inscripcion',
+                hint: 'Pon estudiantes (e) a la izquierda (FROM) e inscripciones (i) a la derecha del RIGHT JOIN.',
+                solution: `SELECT e.nombre, i.fecha_inscripcion\nFROM estudiantes e\nRIGHT JOIN inscripciones i ON e.id_estudiante = i.id_estudiante;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('right join')) return { ok: false, msg: 'El enunciado pide explícitamente practicar RIGHT JOIN.' };
+                    if (!s.includes('estudiantes') || !s.includes('inscripciones')) return { ok: false, msg: 'Involucra las tablas estudiantes e inscripciones.' };
+                    if (!s.includes('id_estudiante')) return { ok: false, msg: 'Conecta ambas tablas mediante id_estudiante en el ON.' };
+                    return { ok: true, msg: '¡Correcto! Exactamente igual al ejemplo de la diapositiva 9.' };
+                },
+                previewHeaders: ['nombre', 'fecha_inscripcion'],
+                previewRows: [
+                    ['Carlos', '2025-03-01'],
+                    ['Maria', '2025-03-02'],
+                    ['Juan', '2025-03-03']
+                ]
+            },
+            {
+                schema: 'uni',
+                prompt: '"Mostrar todos los estudiantes y todas las inscripciones (id_curso), tengan coincidencia o no."',
+                cols: 'e.nombre, i.id_curso',
+                hint: 'Usa FULL OUTER JOIN entre estudiantes (e) e inscripciones (i) con ON e.id_estudiante = i.id_estudiante.',
+                solution: `SELECT e.nombre, i.id_curso\nFROM estudiantes e\nFULL OUTER JOIN inscripciones i ON e.id_estudiante = i.id_estudiante;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('full outer join') && !s.includes('full join')) return { ok: false, msg: 'Debes usar FULL OUTER JOIN (o FULL JOIN) para traer todo de ambos lados.' };
+                    if (!s.includes('estudiantes') || !s.includes('inscripciones')) return { ok: false, msg: 'Cruza estudiantes e inscripciones.' };
+                    if (!s.includes('id_estudiante')) return { ok: false, msg: 'Falta la condición ON e.id_estudiante = i.id_estudiante.' };
+                    return { ok: true, msg: '¡Excelente! Dominas los 4 JOIN principales de la Sesión 8.' };
+                },
+                previewHeaders: ['nombre', 'id_curso'],
+                previewRows: [
+                    ['Carlos', '1'],
+                    ['Maria', '1'],
+                    ['Daniel', 'NULL']
+                ]
+            },
+            {
+                schema: 'banco',
+                prompt: '[Lab Final Banco #9] "Mostrar todas las transacciones realizadas (tipo y monto) junto con el nombre y apellido de cada cliente."',
+                cols: 'cl.nombre, cl.apellido, tr.tipo, tr.monto',
+                hint: 'Observa el esquema del Banco: clientes (cl) se une con cuentas (cu) mediante id_cliente, y cuentas (cu) se une con transacciones (tr) mediante id_cuenta.',
+                solution: `SELECT cl.nombre, cl.apellido, tr.tipo, tr.monto\nFROM clientes cl\nINNER JOIN cuentas cu ON cl.id_cliente = cu.id_cliente\nINNER JOIN transacciones tr ON cu.id_cuenta = tr.id_cuenta;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('clientes') || !s.includes('cuentas') || !s.includes('transacciones')) {
+                        return { ok: false, msg: 'Recuerda que transacciones no tiene id_cliente; debes pasar por cuentas (clientes -> cuentas -> transacciones).' };
+                    }
+                    if (!s.includes('id_cliente') || !s.includes('id_cuenta')) {
+                        return { ok: false, msg: 'Debes igualar id_cliente entre clientes/cuentas e id_cuenta entre cuentas/transacciones.' };
+                    }
+                    return { ok: true, msg: '¡Impecable! Resolviste la consulta #9 del Laboratorio Final del Banco.' };
+                },
+                previewHeaders: ['nombre', 'apellido', 'tipo', 'monto'],
+                previewRows: [
+                    ['Juan', 'Rodríguez', 'Deposito', '500000'],
+                    ['Juan', 'Rodríguez', 'Retiro', '200000'],
+                    ['María', 'López', 'Transferencia', '1000000']
+                ]
+            },
+            {
+                schema: 'banco',
+                prompt: '[Lab Final Banco #12] "Mostrar el saldo promedio (AVG) agrupado por descripción del tipo de cuenta (Ahorros / Corriente)."',
+                cols: 'tc.descripcion, AVG(cu.saldo)',
+                hint: 'Une tipos_cuenta (tc) con cuentas (cu) mediante id_tipo y al final agrupa con GROUP BY tc.descripcion.',
+                solution: `SELECT tc.descripcion, AVG(cu.saldo) AS saldo_promedio\nFROM tipos_cuenta tc\nINNER JOIN cuentas cu ON tc.id_tipo = cu.id_tipo\nGROUP BY tc.descripcion;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('avg(')) return { ok: false, msg: 'Debes usar la función de agregación AVG(cu.saldo) para calcular el promedio.' };
+                    if (!s.includes('tipos_cuenta') || !s.includes('cuentas')) return { ok: false, msg: 'Debes unir tipos_cuenta y cuentas.' };
+                    if (!s.includes('group by') || !s.includes('descripcion')) return { ok: false, msg: 'Falta agrupar por tc.descripcion usando GROUP BY.' };
+                    return { ok: true, msg: '¡Perfecto! Combinaste JOIN + AVG + GROUP BY como en el punto #12 del Laboratorio Final.' };
+                },
+                previewHeaders: ['descripcion', 'saldo_promedio'],
+                previewRows: [
+                    ['Ahorros', '9833333.33'],
+                    ['Corriente', '1025000.00']
+                ]
+            },
+            {
+                schema: 'banco',
+                prompt: '[Lab Final Banco #13] "Mostrar el nombre de cada sucursal y cuántos empleados (COUNT) tiene cada una (incluso si alguna no tuviera empleados)."',
+                cols: 'su.nombre, COUNT(em.id_empleado)',
+                hint: 'Usa LEFT JOIN desde sucursales (su) hacia empleados (em) y agrupa por su.nombre. Ojo: usa COUNT(em.id_empleado), no COUNT(*), para que cuente 0 si no hay empleados.',
+                solution: `SELECT su.nombre, COUNT(em.id_empleado) AS total_empleados\nFROM sucursales su\nLEFT JOIN empleados em ON su.id_sucursal = em.id_sucursal\nGROUP BY su.nombre;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('count(')) return { ok: false, msg: 'Usa COUNT(...) para contar los empleados.' };
+                    if (!s.includes('sucursales') || !s.includes('empleados')) return { ok: false, msg: 'Debes unir sucursales y empleados.' };
+                    if (!s.includes('group by')) return { ok: false, msg: 'Falta el GROUP BY su.nombre al final.' };
+                    return { ok: true, msg: '¡Excelente! Con LEFT JOIN + COUNT(em.id_empleado) + GROUP BY aseguras que ninguna sucursal se pierda.' };
+                },
+                previewHeaders: ['nombre', 'total_empleados'],
+                previewRows: [
+                    ['Sucursal Centro', '2'],
+                    ['Sucursal Norte', '1'],
+                    ['Sucursal Sur', '1']
+                ]
+            },
+            {
+                schema: 'banco',
+                prompt: '[Lab Final Banco #16] "Mostrar el numero_cuenta y saldo de las cuentas cuyo saldo sea superior al promedio general de todas las cuentas."',
+                cols: 'numero_cuenta, saldo',
+                hint: 'Usa una subconsulta en el WHERE: WHERE saldo > (SELECT AVG(saldo) FROM cuentas).',
+                solution: `SELECT numero_cuenta, saldo\nFROM cuentas\nWHERE saldo > (SELECT AVG(saldo) FROM cuentas);`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('cuentas')) return { ok: false, msg: 'Consulta sobre la tabla cuentas.' };
+                    if (!s.includes('where')) return { ok: false, msg: 'Necesitas filtrar con la cláusula WHERE.' };
+                    if (!s.includes('avg(')) return { ok: false, msg: 'Debes comparar contra el promedio usando una subconsulta (SELECT AVG(saldo) FROM cuentas).' };
+                    return { ok: true, msg: '¡Genial! Dominas las subconsultas escalares en WHERE (puntos 16, 17 y 19 del Lab Banco).' };
+                },
+                previewHeaders: ['numero_cuenta', 'saldo'],
+                previewRows: [
+                    ['20003', '9500000'],
+                    ['20005', '15000000']
+                ]
+            },
+            {
+                schema: 'biblio',
+                prompt: '[Lab Biblioteca Parte 6] "Mostrar el título de los libros que NUNCA han sido prestados."',
+                cols: 'l.titulo',
+                hint: 'Haz LEFT JOIN desde libros (l) hacia prestamos (p) por id_libro y filtra con WHERE p.id_libro IS NULL.',
+                solution: `SELECT l.titulo\nFROM libros l\nLEFT JOIN prestamos p ON l.id_libro = p.id_libro\nWHERE p.id_libro IS NULL;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('libros') || !s.includes('prestamos')) return { ok: false, msg: 'Debes relacionar libros y prestamos.' };
+                    if (!s.includes('left join') && !s.includes('right join')) return { ok: false, msg: 'Usa LEFT JOIN para mantener los libros sin préstamos.' };
+                    if (!s.includes('is null')) return { ok: false, msg: 'Filtra los no prestados con WHERE p.id_libro IS NULL.' };
+                    return { ok: true, msg: '¡Exacto! "La ciudad y los perros" (id 4) nunca fue prestado y aparece aquí.' };
+                },
+                previewHeaders: ['titulo'],
+                previewRows: [
+                    ['La ciudad y los perros']
+                ]
+            },
+            {
+                schema: 'uni',
+                prompt: '[Clase 6 Diap. 15] "Mostrar el id_estudiante y el total de cursos inscritos (COUNT) únicamente de los estudiantes inscritos en MÁS DE 1 curso."',
+                cols: 'id_estudiante, COUNT(*)',
+                hint: 'Agrupa inscripciones por id_estudiante con GROUP BY y filtra los grupos con HAVING COUNT(*) > 1.',
+                solution: `SELECT id_estudiante, COUNT(*) AS total_cursos\nFROM inscripciones\nGROUP BY id_estudiante\nHAVING COUNT(*) > 1;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('group by')) return { ok: false, msg: 'Debes agrupar por id_estudiante usando GROUP BY.' };
+                    if (!s.includes('having')) return { ok: false, msg: 'Para filtrar el resultado de un COUNT(*) debes usar HAVING COUNT(*) > 1 (no WHERE).' };
+                    return { ok: true, msg: '¡Prueba superada! Sabes exactamente cuándo usar HAVING en lugar de WHERE.' };
+                },
+                previewHeaders: ['id_estudiante', 'total_cursos'],
+                previewRows: [
+                    ['1', '2'],
+                    ['2', '2'],
+                    ['3', '2']
+                ]
+            }
+        ];
+
+        let currentChallengeIdx = 0;
+
+        function loadChallenge(idx) {
+            currentChallengeIdx = idx;
+            const ch = challenges[idx];
+            const schInfo = schemaTemplates[ch.schema];
+
+            document.getElementById('chal-domain-badge').textContent = schInfo.badge;
+            document.getElementById('sim-schema-title').textContent = schInfo.title;
+            document.getElementById('sim-schema-list').innerHTML = schInfo.html;
+
+            document.getElementById('progress-badge').textContent = `Reto ${idx + 1} de ${challenges.length}`;
+            document.getElementById('chal-prompt').textContent = ch.prompt;
+            document.getElementById('chal-cols').textContent = ch.cols;
+            document.getElementById('chal-hint-text').textContent = ch.hint;
+            document.getElementById('chal-hint-box').classList.add('hidden');
+
+            // Actualizar pills
+            document.querySelectorAll('.chal-pill').forEach((pill, i) => {
+                if (i === idx) {
+                    pill.classList.remove('bg-slate-100', 'text-slate-600');
+                    pill.classList.add('bg-indigo-600', 'text-white');
+                } else {
+                    pill.classList.remove('bg-indigo-600', 'text-white');
+                    pill.classList.add('bg-slate-100', 'text-slate-600');
+                }
+            });
+
+            document.getElementById('sql-editor').value = '';
+            document.getElementById('eval-feedback-box').innerHTML = `
+                <div class="flex items-center gap-2 text-slate-500 text-sm">
+                    <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>Escribe tu consulta arriba y haz clic en <strong>Ejecutar y Evaluar Consulta</strong> para ver los resultados.</span>
+                </div>
+            `;
+        }
+
+        function toggleHint() {
+            document.getElementById('chal-hint-box').classList.toggle('hidden');
+        }
+
+        function showSolution() {
+            document.getElementById('sql-editor').value = challenges[currentChallengeIdx].solution;
+        }
+
+        function clearEditor() {
+            document.getElementById('sql-editor').value = '';
+            document.getElementById('sql-editor').focus();
+        }
+
+        function insertSnippet(text) {
+            const editor = document.getElementById('sql-editor');
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const val = editor.value;
+            editor.value = val.substring(0, start) + text + val.substring(end);
+            editor.focus();
+            editor.selectionStart = editor.selectionEnd = start + text.length;
+        }
+
+        function runQuery() {
+            const sql = document.getElementById('sql-editor').value.trim();
+            const feedbackBox = document.getElementById('eval-feedback-box');
+
+            if (!sql) {
+                feedbackBox.innerHTML = `
+                    <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm font-medium">
+                        ⚠️ El editor está vacío. Escribe tu consulta SQL antes de ejecutar.
+                    </div>
+                `;
+                return;
+            }
+
+            const ch = challenges[currentChallengeIdx];
+            const res = ch.validate(sql);
+
+            if (!res.ok) {
+                feedbackBox.innerHTML = `
+                    <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 space-y-1">
+                        <div class="font-bold text-sm flex items-center gap-2">
+                            <span>❌ El profesor revisa tu consulta y observa un detalle:</span>
+                        </div>
+                        <p class="text-sm">${res.msg}</p>
+                    </div>
+                `;
+            } else {
+                const headersHtml = ch.previewHeaders.map(h => `<th class="p-2.5 text-left font-mono text-xs text-emerald-900">${h}</th>`).join('');
+                const rowsHtml = ch.previewRows.map(row => `
+                    <tr class="border-t border-emerald-100">
+                        ${row.map(cell => `<td class="p-2.5 text-xs ${cell === 'NULL' ? 'font-mono text-rose-600 italic' : 'text-slate-800'}">${cell}</td>`).join('')}
+                    </tr>
+                `).join('');
+
+                const nextBtn = currentChallengeIdx < challenges.length - 1
+                    ? `<button onclick="loadChallenge(${currentChallengeIdx + 1})" class="mt-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Pasar al Siguiente Reto →</button>`
+                    : `<span class="inline-block mt-3 text-xs font-bold text-emerald-800 bg-emerald-200/70 px-3 py-1.5 rounded-lg">🎉 ¡Completaste todos los retos de práctica!</span>`;
+
+                feedbackBox.innerHTML = `
+                    <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 space-y-3">
+                        <div class="font-bold text-sm flex items-center gap-2 text-emerald-800">
+                            <span>✅ ${res.msg}</span>
+                        </div>
+                        <div class="bg-white rounded-xl border border-emerald-200 overflow-hidden">
+                            <div class="bg-emerald-100/70 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-900">
+                                Vista previa de la tabla devuelta
+                            </div>
+                            <table class="w-full">
+                                <thead class="bg-emerald-50/50"><tr>${headersHtml}</tr></thead>
+                                <tbody>${rowsHtml}</tbody>
+                            </table>
+                        </div>
+                        <div>${nextBtn}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Inicializar vistas por defecto al cargar
+        window.onload = function() {
+            selectJoinType('inner');
+            loadChallenge(0);
+        };
+    </script>
+</body>
+</html>
