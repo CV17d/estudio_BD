@@ -1063,6 +1063,201 @@ INNER JOIN inscripciones i ON e.id_estudiante = i.id_estudiante;</pre>
                     </div>
                 </div>
 
+                <!-- Subsección Avanzada: Combinar JOIN + GROUP BY + HAVING + ORDER BY -->
+                <div class="mt-10 pt-8 border-t-2 border-dashed border-slate-200 space-y-6">
+                    <div class="max-w-4xl">
+                        <span class="inline-block bg-purple-100 text-purple-800 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2">
+                            Paso siguiente • Cruce + Agrupación + Filtros de Grupo
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">
+                            Paso siguiente: Combinar JOIN + GROUP BY + HAVING + ORDER BY
+                        </h3>
+                        <p class="text-sm text-slate-600 mt-1 leading-relaxed">
+                            En los exámenes más exigentes, el profesor no te pedirá un simple JOIN plano: te pedirá unir tablas, agruparlas por cliente o estudiante, filtrar únicamente los grupos que cumplan una condición estadística y ordenarlos.
+                        </p>
+                    </div>
+
+                    <!-- 1. El Orden Obligatorio de Ejecución y Escritura -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-sm text-slate-900 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-mono font-bold">1</span>
+                                <span>El Orden Estricto de Escritura vs. Ejecución</span>
+                            </h4>
+                            <span class="text-[11px] bg-rose-50 text-rose-700 font-bold px-2.5 py-0.5 rounded-md border border-rose-200">
+                                ⚠️ ¡Regla de Oro para Examen!
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-600">
+                            SQL debe <strong>escribirse obligatoriamente en esta secuencia exacta</strong> o el motor lanzará error de sintaxis:
+                        </p>
+                        <!-- Cadena visual -->
+                        <div class="flex flex-wrap items-center gap-1.5 font-mono text-xs font-bold">
+                            <span class="bg-indigo-600 text-white px-2.5 py-1 rounded-lg">1. SELECT</span>
+                            <span class="text-slate-400">&rarr;</span>
+                            <span class="bg-sky-600 text-white px-2.5 py-1 rounded-lg">2. FROM</span>
+                            <span class="text-slate-400">&rarr;</span>
+                            <span class="bg-emerald-600 text-white px-2.5 py-1 rounded-lg">3. JOIN ... ON</span>
+                            <span class="text-slate-400">&rarr;</span>
+                            <span class="bg-amber-600 text-white px-2.5 py-1 rounded-lg">4. WHERE</span>
+                            <span class="text-slate-400">&rarr;</span>
+                            <span class="bg-purple-600 text-white px-2.5 py-1 rounded-lg">5. GROUP BY</span>
+                            <span class="text-slate-400">&rarr;</span>
+                            <span class="bg-pink-600 text-white px-2.5 py-1 rounded-lg">6. HAVING</span>
+                            <span class="text-slate-400">&rarr;</span>
+                            <span class="bg-slate-800 text-white px-2.5 py-1 rounded-lg">7. ORDER BY</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600 italic bg-white p-2.5 rounded-lg border border-slate-200">
+                            <strong>Dato de ejecución interna:</strong> El motor de PostgreSQL ejecuta internamente primero el <code>FROM / JOIN</code> para construir la tabla cruzada, filtra filas con <code>WHERE</code>, agrupa con <code>GROUP BY</code>, descarta grupos con <code>HAVING</code>, proyecta las columnas con <code>SELECT</code> y finalmente ordena con <code>ORDER BY</code>.
+                        </p>
+                    </div>
+
+                    <!-- 2. Comparativa WHERE vs HAVING y ORDER BY -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- WHERE vs HAVING -->
+                        <div class="bg-white border-2 border-indigo-100 rounded-2xl p-5 space-y-3 shadow-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-purple-600 text-white flex items-center justify-center text-xs font-mono font-bold">2</span>
+                                <h4 class="font-bold text-sm text-slate-900">Diferencia Clave: WHERE vs. HAVING</h4>
+                            </div>
+                            <div class="space-y-2 text-xs">
+                                <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-xl space-y-1">
+                                    <strong class="text-amber-900 block font-mono text-xs">WHERE (Filtra filas individuales)</strong>
+                                    <p class="text-slate-600">Actúa <strong>ANTES</strong> de agrupar. Evalúa columna por columna. <span class="text-rose-700 font-bold">¡NUNCA pongas COUNT(), SUM(), AVG() en WHERE!</span></p>
+                                    <code class="block font-mono text-[11px] bg-white text-slate-800 p-1.5 rounded border border-amber-100">WHERE cu.saldo > 1000000</code>
+                                </div>
+                                <div class="p-3 bg-pink-50/70 border border-pink-200 rounded-xl space-y-1">
+                                    <strong class="text-pink-900 block font-mono text-xs">HAVING (Filtra grupos calculados)</strong>
+                                    <p class="text-slate-600">Actúa <strong>DESPUÉS</strong> de agrupar. Solo se usa con <code>GROUP BY</code> para evaluar resultados de funciones de agregación.</p>
+                                    <code class="block font-mono text-[11px] bg-white text-slate-800 p-1.5 rounded border border-pink-100">HAVING COUNT(cu.id_cuenta) > 1</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ORDER BY ASC vs DESC -->
+                        <div class="bg-white border-2 border-indigo-100 rounded-2xl p-5 space-y-3 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="w-6 h-6 rounded-lg bg-slate-800 text-white flex items-center justify-center text-xs font-mono font-bold">3</span>
+                                    <h4 class="font-bold text-sm text-slate-900">ORDER BY: Ordenamiento Final</h4>
+                                </div>
+                                <p class="text-xs text-slate-600 mb-3">
+                                    Determina cómo se presentan las filas finales al usuario o al profesor:
+                                </p>
+                                <div class="space-y-2 text-xs">
+                                    <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+                                        <div>
+                                            <strong class="font-mono text-indigo-700">ASC (Ascendente)</strong>
+                                            <span class="block text-slate-500 text-[11px]">De menor a mayor (A &rarr; Z, 1 &rarr; 9). Es el valor por defecto si no escribes nada.</span>
+                                        </div>
+                                        <span class="text-xs font-bold text-slate-400 font-mono">1 &rarr; 100</span>
+                                    </div>
+                                    <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+                                        <div>
+                                            <strong class="font-mono text-indigo-700">DESC (Descendente)</strong>
+                                            <span class="block text-slate-500 text-[11px]">De mayor a menor (Z &rarr; A, 100 &rarr; 1). Esencial para "los saldos más altos" o "más inscritos".</span>
+                                        </div>
+                                        <span class="text-xs font-bold text-slate-400 font-mono">100 &rarr; 1</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-[11px] text-slate-500 bg-slate-50 p-2 rounded-lg border border-slate-200">
+                                <strong>Tip:</strong> Puedes ordenar por una columna calculada usando su alias asignado en el SELECT (ej: <code>ORDER BY saldo_total DESC</code>).
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. SIMULADOR INTERACTIVO PASO A PASO -->
+                    <div class="bg-white border-2 border-indigo-300 rounded-2xl p-5 sm:p-6 shadow-md space-y-5">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                            <div>
+                                <span class="bg-indigo-100 text-indigo-800 text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full">Laboratorio Interactivo</span>
+                                <h4 class="text-lg font-bold text-slate-900 mt-1">Interruptor Dinámico de Cláusulas (clientes + cuentas)</h4>
+                                <p class="text-xs text-slate-500">Activa o desactiva cláusulas para ver cómo se transforma la consulta SQL y la tabla de resultados en vivo:</p>
+                            </div>
+                            <div class="flex items-center gap-1.5 self-start sm:self-auto bg-slate-100 p-1 rounded-xl">
+                                <button onclick="setPipelineStep(1)" id="pipe-btn-1" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-indigo-600 text-white transition">Paso 1: JOIN</button>
+                                <button onclick="setPipelineStep(2)" id="pipe-btn-2" class="px-2.5 py-1 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition">Paso 2: GROUP</button>
+                                <button onclick="setPipelineStep(3)" id="pipe-btn-3" class="px-2.5 py-1 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition">Paso 3: HAVING</button>
+                                <button onclick="setPipelineStep(4)" id="pipe-btn-4" class="px-2.5 py-1 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition">Paso 4: ORDER</button>
+                            </div>
+                        </div>
+
+                        <!-- Interruptores de Cláusulas (Toggles) -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                            <button onclick="togglePipelineClause('join')" id="tog-join" class="p-3 rounded-xl border-2 border-indigo-600 bg-indigo-50 text-indigo-900 font-bold text-xs text-left transition flex items-center justify-between shadow-xs">
+                                <div>
+                                    <span class="block text-[10px] text-indigo-500 font-mono">1. BASE</span>
+                                    <span>INNER JOIN</span>
+                                </div>
+                                <span class="text-emerald-600 text-xs font-mono font-bold">🔒 ON</span>
+                            </button>
+
+                            <button onclick="togglePipelineClause('group')" id="tog-group" class="p-3 rounded-xl border-2 border-slate-200 bg-white text-slate-700 font-bold text-xs text-left transition flex items-center justify-between hover:border-slate-300">
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 font-mono">2. AGRUPAR</span>
+                                    <span>GROUP BY</span>
+                                </div>
+                                <span id="tog-group-icon" class="text-slate-400 text-xs font-mono">⚪ OFF</span>
+                            </button>
+
+                            <button onclick="togglePipelineClause('having')" id="tog-having" class="p-3 rounded-xl border-2 border-slate-200 bg-white text-slate-700 font-bold text-xs text-left transition flex items-center justify-between hover:border-slate-300">
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 font-mono">3. FILTRO GRUPO</span>
+                                    <span>HAVING &gt; 1</span>
+                                </div>
+                                <span id="tog-having-icon" class="text-slate-400 text-xs font-mono">⚪ OFF</span>
+                            </button>
+
+                            <button onclick="togglePipelineClause('order')" id="tog-order" class="p-3 rounded-xl border-2 border-slate-200 bg-white text-slate-700 font-bold text-xs text-left transition flex items-center justify-between hover:border-slate-300">
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 font-mono">4. ORDENAR</span>
+                                    <span>ORDER BY DESC</span>
+                                </div>
+                                <span id="tog-order-icon" class="text-slate-400 text-xs font-mono">⚪ OFF</span>
+                            </button>
+                        </div>
+
+                        <!-- Explicación Dinámica de lo que ocurre -->
+                        <div id="pipeline-explanation" class="p-3.5 rounded-xl bg-indigo-50/80 border border-indigo-100 text-xs text-indigo-950 flex items-start gap-2.5">
+                            <span class="text-base leading-none">ℹ️</span>
+                            <div id="pipeline-explanation-text">
+                                <strong>Paso 1 (Solo JOIN):</strong> Se cruzan <code>clientes</code> con <code>cuentas</code>. Cada fila representa una cuenta bancaria individual. Clientes con varias cuentas (como Juan y Pedro) aparecen repetidos en varias filas.
+                            </div>
+                        </div>
+
+                        <!-- Grid: Código SQL Dinámico + Tabla de Resultados Viva -->
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+                            <!-- Código SQL -->
+                            <div class="lg:col-span-6 bg-slate-900 rounded-xl p-4 font-mono text-xs text-slate-200 shadow-inner space-y-1 overflow-x-auto border border-slate-800">
+                                <div class="flex justify-between items-center text-[10px] text-slate-400 pb-2 border-b border-slate-800 font-sans mb-1">
+                                    <span>CONSULTA SQL GENERADA EN VIVO</span>
+                                    <button onclick="copyCode('pipeline-sql-text', this)" class="text-indigo-400 hover:text-indigo-300 font-bold font-sans">Copiar SQL</button>
+                                </div>
+                                <pre id="pipeline-sql-text" class="text-[11px] sm:text-xs leading-relaxed text-emerald-300 whitespace-pre"></pre>
+                            </div>
+
+                            <!-- Tabla de Resultados en Vivo -->
+                            <div class="lg:col-span-6 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+                                <div class="bg-slate-800 text-white px-3 py-2 font-mono text-xs font-bold flex justify-between items-center">
+                                    <span>VISTA PREVIA EN VIVO</span>
+                                    <span id="pipeline-row-count" class="bg-indigo-600 px-2 py-0.5 rounded text-[10px] font-sans">7 filas devueltas</span>
+                                </div>
+                                <div class="overflow-x-auto max-h-[320px]">
+                                    <table class="w-full text-xs text-left">
+                                        <thead id="pipeline-thead" class="bg-slate-50 text-slate-700 border-b border-slate-200 font-mono">
+                                            <!-- Encabezados dinámicos -->
+                                        </thead>
+                                        <tbody id="pipeline-tbody" class="divide-y divide-slate-100 font-mono">
+                                            <!-- Filas dinámicas -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="mt-6 flex justify-end">
                     <button onclick="switchSection('simulador')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2 text-sm">
                         <span>Ir al Simulador de Examen en Vivo</span>
@@ -1927,10 +2122,249 @@ INNER JOIN inscripciones i ON e.id_estudiante = i.id_estudiante;</pre>
             }
         }
 
+
+        // =========================================================================
+        // PIPELINE SIMULATOR: COMBINAR JOIN + GROUP BY + HAVING + ORDER BY
+        // =========================================================================
+        const pipelineRawAccounts = [
+            { id_cliente: 1, nombre: 'Juan', ciudad: 'Bogotá', numero_cuenta: '20001', saldo: 5000000 },
+            { id_cliente: 1, nombre: 'Juan', ciudad: 'Bogotá', numero_cuenta: '20006', saldo: 3000000 },
+            { id_cliente: 2, nombre: 'María', ciudad: 'Cali', numero_cuenta: '20002', saldo: 1200000 },
+            { id_cliente: 3, nombre: 'Pedro', ciudad: 'Medellín', numero_cuenta: '20003', saldo: 9500000 },
+            { id_cliente: 3, nombre: 'Pedro', ciudad: 'Medellín', numero_cuenta: '20007', saldo: 4500000 },
+            { id_cliente: 4, nombre: 'Laura', ciudad: 'Pasto', numero_cuenta: '20004', saldo: 850000 },
+            { id_cliente: 5, nombre: 'Camila', ciudad: 'Bogotá', numero_cuenta: '20005', saldo: 15000000 }
+        ];
+
+        const pipelineState = {
+            group: false,
+            having: false,
+            order: false
+        };
+
+        function setPipelineStep(step) {
+            if (step === 1) {
+                pipelineState.group = false;
+                pipelineState.having = false;
+                pipelineState.order = false;
+            } else if (step === 2) {
+                pipelineState.group = true;
+                pipelineState.having = false;
+                pipelineState.order = false;
+            } else if (step === 3) {
+                pipelineState.group = true;
+                pipelineState.having = true;
+                pipelineState.order = false;
+            } else if (step === 4) {
+                pipelineState.group = true;
+                pipelineState.having = true;
+                pipelineState.order = true;
+            }
+            updatePipelineUI();
+        }
+
+        function togglePipelineClause(clause) {
+            if (clause === 'join') {
+                // JOIN always on as the base
+                return;
+            } else if (clause === 'group') {
+                pipelineState.group = !pipelineState.group;
+                if (!pipelineState.group) {
+                    pipelineState.having = false; // Having requires group
+                }
+            } else if (clause === 'having') {
+                pipelineState.having = !pipelineState.having;
+                if (pipelineState.having) {
+                    pipelineState.group = true; // Auto-enable group
+                }
+            } else if (clause === 'order') {
+                pipelineState.order = !pipelineState.order;
+            }
+            updatePipelineUI();
+        }
+
+        function updatePipelineUI() {
+            // Update toggle buttons appearance
+            const togGroup = document.getElementById('tog-group');
+            const togHaving = document.getElementById('tog-having');
+            const togOrder = document.getElementById('tog-order');
+
+            const togGroupIcon = document.getElementById('tog-group-icon');
+            const togHavingIcon = document.getElementById('tog-having-icon');
+            const togOrderIcon = document.getElementById('tog-order-icon');
+
+            // GROUP BY button
+            if (pipelineState.group) {
+                togGroup.classList.remove('border-slate-200', 'bg-white', 'text-slate-700');
+                togGroup.classList.add('border-purple-600', 'bg-purple-50', 'text-purple-900', 'shadow-xs');
+                togGroupIcon.innerHTML = '🟣 ON';
+                togGroupIcon.className = 'text-purple-600 text-xs font-mono font-bold';
+            } else {
+                togGroup.classList.remove('border-purple-600', 'bg-purple-50', 'text-purple-900', 'shadow-xs');
+                togGroup.classList.add('border-slate-200', 'bg-white', 'text-slate-700');
+                togGroupIcon.innerHTML = '⚪ OFF';
+                togGroupIcon.className = 'text-slate-400 text-xs font-mono';
+            }
+
+            // HAVING button
+            if (pipelineState.having) {
+                togHaving.classList.remove('border-slate-200', 'bg-white', 'text-slate-700');
+                togHaving.classList.add('border-pink-600', 'bg-pink-50', 'text-pink-900', 'shadow-xs');
+                togHavingIcon.innerHTML = '🟣 ON';
+                togHavingIcon.className = 'text-pink-600 text-xs font-mono font-bold';
+            } else {
+                togHaving.classList.remove('border-pink-600', 'bg-pink-50', 'text-pink-900', 'shadow-xs');
+                togHaving.classList.add('border-slate-200', 'bg-white', 'text-slate-700');
+                togHavingIcon.innerHTML = '⚪ OFF';
+                togHavingIcon.className = 'text-slate-400 text-xs font-mono';
+            }
+
+            // ORDER BY button
+            if (pipelineState.order) {
+                togOrder.classList.remove('border-slate-200', 'bg-white', 'text-slate-700');
+                togOrder.classList.add('border-slate-800', 'bg-slate-100', 'text-slate-900', 'shadow-xs');
+                togOrderIcon.innerHTML = '⚫ ON';
+                togOrderIcon.className = 'text-slate-900 text-xs font-mono font-bold';
+            } else {
+                togOrder.classList.remove('border-slate-800', 'bg-slate-100', 'text-slate-900', 'shadow-xs');
+                togOrder.classList.add('border-slate-200', 'bg-white', 'text-slate-700');
+                togOrderIcon.innerHTML = '⚪ OFF';
+                togOrderIcon.className = 'text-slate-400 text-xs font-mono';
+            }
+
+            // Update Step buttons
+            for (let i = 1; i <= 4; i++) {
+                const btn = document.getElementById(`pipe-btn-${i}`);
+                if (!btn) continue;
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                btn.classList.add('text-slate-600');
+            }
+            if (!pipelineState.group && !pipelineState.having && !pipelineState.order) {
+                document.getElementById('pipe-btn-1').classList.add('bg-indigo-600', 'text-white');
+            } else if (pipelineState.group && !pipelineState.having && !pipelineState.order) {
+                document.getElementById('pipe-btn-2').classList.add('bg-indigo-600', 'text-white');
+            } else if (pipelineState.group && pipelineState.having && !pipelineState.order) {
+                document.getElementById('pipe-btn-3').classList.add('bg-indigo-600', 'text-white');
+            } else if (pipelineState.group && pipelineState.having && pipelineState.order) {
+                document.getElementById('pipe-btn-4').classList.add('bg-indigo-600', 'text-white');
+            }
+
+            // Build SQL & Explanation & Render Table
+            renderPipelineData();
+        }
+
+        function renderPipelineData() {
+            const sqlEl = document.getElementById('pipeline-sql-text');
+            const expEl = document.getElementById('pipeline-explanation-text');
+            const countEl = document.getElementById('pipeline-row-count');
+            const theadEl = document.getElementById('pipeline-thead');
+            const tbodyEl = document.getElementById('pipeline-tbody');
+
+            let sql = '';
+            let exp = '';
+            let headers = [];
+            let rows = [];
+
+            if (!pipelineState.group) {
+                // FLAT JOIN (No Group By)
+                sql = `SELECT c.nombre, c.ciudad, cu.numero_cuenta, cu.saldo\nFROM clientes c\nINNER JOIN cuentas cu ON c.id_cliente = cu.id_cliente`;
+                if (pipelineState.order) {
+                    sql += `\nORDER BY cu.saldo DESC;`;
+                    exp = `<strong>JOIN + ORDER BY DESC:</strong> Las 7 cuentas bancarias se ordenan de mayor saldo a menor saldo (Camila con $15,000,000 pasa al primer puesto). Cada fila sigue representando una cuenta individual.`;
+                } else {
+                    sql += `;`;
+                    exp = `<strong>Paso 1 (Solo JOIN):</strong> Se cruzan <code>clientes</code> con <code>cuentas</code>. Cada fila representa una cuenta bancaria individual. Clientes con varias cuentas (Juan y Pedro) aparecen en 2 filas distintas.`;
+                }
+
+                headers = ['c.nombre', 'c.ciudad', 'cu.numero_cuenta', 'cu.saldo'];
+                let data = [...pipelineRawAccounts];
+                if (pipelineState.order) {
+                    data.sort((a, b) => b.saldo - a.saldo);
+                }
+                rows = data.map(item => [
+                    item.nombre,
+                    item.ciudad,
+                    item.numero_cuenta,
+                    '$' + item.saldo.toLocaleString('es-CO')
+                ]);
+
+            } else {
+                // GROUP BY IS ACTIVE
+                // Aggregate data by client
+                const clientGroups = {};
+                pipelineRawAccounts.forEach(item => {
+                    if (!clientGroups[item.nombre]) {
+                        clientGroups[item.nombre] = {
+                            nombre: item.nombre,
+                            ciudad: item.ciudad,
+                            total_cuentas: 0,
+                            saldo_total: 0
+                        };
+                    }
+                    clientGroups[item.nombre].total_cuentas += 1;
+                    clientGroups[item.nombre].saldo_total += item.saldo;
+                });
+
+                let groupList = Object.values(clientGroups);
+
+                sql = `SELECT c.nombre, c.ciudad, COUNT(cu.id_cuenta) AS total_cuentas, SUM(cu.saldo) AS saldo_total\nFROM clientes c\nINNER JOIN cuentas cu ON c.id_cliente = cu.id_cliente\nGROUP BY c.nombre, c.ciudad`;
+
+                if (pipelineState.having) {
+                    sql += `\nHAVING COUNT(cu.id_cuenta) > 1`;
+                    groupList = groupList.filter(g => g.total_cuentas > 1);
+                }
+
+                if (pipelineState.order) {
+                    sql += `\nORDER BY saldo_total DESC;`;
+                    groupList.sort((a, b) => b.saldo_total - a.saldo_total);
+                } else {
+                    sql += `;`;
+                }
+
+                headers = ['c.nombre', 'c.ciudad', 'total_cuentas (COUNT)', 'saldo_total (SUM)'];
+                rows = groupList.map(g => [
+                    g.nombre,
+                    g.ciudad,
+                    g.total_cuentas + ' cuenta' + (g.total_cuentas > 1 ? 's' : ''),
+                    '$' + g.saldo_total.toLocaleString('es-CO')
+                ]);
+
+                if (pipelineState.having && pipelineState.order) {
+                    exp = `<strong>Paso 4 (JOIN + GROUP + HAVING + ORDER BY):</strong> ¡Consulta completa de nivel examen! Las cuentas fueron agrupadas por cliente, luego filtradas con <code>HAVING COUNT(...) > 1</code> para conservar solo clientes con más de una cuenta, y finalmente ordenadas por saldo descendente (Pedro con $14M primero, Juan con $8M segundo).`;
+                } else if (pipelineState.having) {
+                    exp = `<strong>Paso 3 (+ HAVING):</strong> <code>HAVING COUNT(cu.id_cuenta) > 1</code> evaluó los grupos y descartó a María, Laura y Camila porque solo tenían 1 cuenta. Solo sobrevivieron Juan y Pedro. <span class="text-rose-700 font-bold">¡WHERE no podría haber hecho esto porque no conoce el COUNT!</span>`;
+                } else if (pipelineState.order) {
+                    exp = `<strong>Paso 2B (GROUP BY + ORDER BY):</strong> Los 5 clientes consolidados se ordenan de mayor a menor saldo total (Camila con $15M queda de primera).`;
+                } else {
+                    exp = `<strong>Paso 2 (+ GROUP BY):</strong> ¡Las filas repetidas se compactaron! Ya no vemos cuentas sueltas, sino 1 fila por cliente con sus totales calculados mediante <code>COUNT(cu.id_cuenta)</code> y <code>SUM(cu.saldo)</code>.`;
+                }
+            }
+
+            // Render SQL
+            sqlEl.textContent = sql;
+
+            // Render Explanation
+            expEl.innerHTML = exp;
+
+            // Render Row Count
+            countEl.textContent = `${rows.length} fila${rows.length === 1 ? '' : 's'} devuelta${rows.length === 1 ? '' : 's'}`;
+
+            // Render Table Header
+            theadEl.innerHTML = `<tr>${headers.map(h => `<th class="p-2.5 font-bold">${h}</th>`).join('')}</tr>`;
+
+            // Render Table Body
+            tbodyEl.innerHTML = rows.map((r, idx) => `
+                <tr class="${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/60'} hover:bg-indigo-50/40 transition">
+                    ${r.map((c, colIdx) => `<td class="p-2.5 text-slate-800 ${colIdx >= 2 ? 'font-bold text-indigo-700' : ''}">${c}</td>`).join('')}
+                </tr>
+            `).join('');
+        }
+
         // Inicializar vistas por defecto al cargar
         window.onload = function() {
             selectJoinType('inner');
             loadChallenge(0);
+            updatePipelineUI();
         };
 
         // =========================================================================
