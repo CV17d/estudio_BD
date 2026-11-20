@@ -61,18 +61,22 @@
 
                 <!-- Navegación por Módulos -->
                 <nav class="flex space-x-1 sm:space-x-2 bg-slate-100 p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
-                    <button onclick="switchSection('fundamentos')" id="nav-fundamentos" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition">
+                    <button onclick="switchSection('fundamentos')" id="nav-fundamentos" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition whitespace-nowrap">
                         1. SQL Completo
                     </button>
-                    <button onclick="switchSection('laboratorio')" id="nav-laboratorio" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">
-                        2. Laboratorio JOINs
+                    <button onclick="switchSection('ddl')" id="nav-ddl" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5 whitespace-nowrap">
+                        <span>2. DDL y Carga (bancodb)</span>
+                        <span class="bg-indigo-100 text-indigo-800 text-[10px] px-1.5 py-0.5 rounded-full font-bold">Lab Final</span>
                     </button>
-                    <button onclick="switchSection('simulador')" id="nav-simulador" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5">
-                        <span>3. Examen Real (12 Retos)</span>
+                    <button onclick="switchSection('laboratorio')" id="nav-laboratorio" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+                        3. Laboratorio JOINs
+                    </button>
+                    <button onclick="switchSection('simulador')" id="nav-simulador" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5 whitespace-nowrap">
+                        <span>4. Examen Real (12 Retos)</span>
                         <span class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded-full font-bold">Pro</span>
                     </button>
-                    <button onclick="switchSection('estrategia')" id="nav-estrategia" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">
-                        4. Protocolo Examen
+                    <button onclick="switchSection('estrategia')" id="nav-estrategia" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+                        5. Protocolo Examen
                     </button>
                 </nav>
             </div>
@@ -209,6 +213,102 @@
                         </p>
                         <div class="bg-white p-3 rounded-lg border border-indigo-100 text-xs text-slate-600">
                             <strong>Tip vital:</strong> Si usas una función como <code>COUNT(...)</code> junto con una columna normal como <code>s.nombre</code>, ¡estás obligado a poner <code>GROUP BY s.nombre</code> más abajo!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Taxonomía SQL: DDL vs DML de Escritura vs DQL (Caso bancodb) -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-indigo-100 text-indigo-700 text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md">Fundamento Esencial</span>
+                            <span class="text-xs text-slate-400 font-medium">Clasificación de Sentencias SQL</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mt-1">DDL vs. DML de Escritura vs. DQL (Mapeado a <code class="text-indigo-600">bancodb</code>)</h3>
+                        <p class="text-xs sm:text-sm text-slate-500">Distingue el rol exacto de cada familia de comandos evaluadas por el profesor en el Laboratorio Final:</p>
+                    </div>
+                    <button onclick="switchSection('ddl')" class="self-start sm:self-auto text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3.5 py-2 rounded-xl transition flex items-center gap-1.5">
+                        <span>Abrir Módulo 2: DDL y Carga</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <!-- Tarjeta DDL -->
+                    <div class="rounded-xl border border-sky-200 bg-sky-50/40 p-4 flex flex-col justify-between">
+                        <div class="space-y-2.5">
+                            <div class="flex items-center justify-between">
+                                <span class="font-extrabold text-xs uppercase tracking-wider text-sky-800 bg-sky-100 px-2.5 py-1 rounded-md">1. DDL (Definición)</span>
+                                <span class="text-[10px] font-mono text-sky-600 font-semibold">Estructura / Catálogo</span>
+                            </div>
+                            <h4 class="font-bold text-sm text-slate-900">Define contenedores y restricciones</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Modifica el catálogo de la BD: crea o altera bases de datos, tablas, tipos, llaves primarias (<code class="text-sky-900 font-bold">PK</code>) y foráneas (<code class="text-sky-900 font-bold">FK</code>).
+                            </p>
+                            <div class="bg-slate-900 rounded-lg p-3 font-mono text-[11px] text-slate-200 space-y-1">
+                                <div class="text-slate-400 font-bold">// Comandos: CREATE, ALTER, DROP</div>
+                                <div><span class="code-keyword">CREATE DATABASE</span> <span class="code-field">bancodb</span>;</div>
+                                <div><span class="code-keyword">CREATE TABLE</span> <span class="code-table">sucursales</span> (</div>
+                                <div class="pl-3"><span class="code-field">id_sucursal</span> <span class="text-amber-400">SERIAL PRIMARY KEY</span>,</div>
+                                <div class="pl-3"><span class="code-field">nombre</span> <span class="text-sky-300">VARCHAR(100) NOT NULL</span></div>
+                                <div>);</div>
+                                <div><span class="code-keyword">ALTER TABLE</span> <span class="code-table">prestamos</span> <span class="code-keyword">ADD</span> <span class="code-field">estado</span> <span class="text-sky-300">VARCHAR(20)</span>;</div>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-[11px] bg-white border border-sky-100 p-2.5 rounded-lg text-slate-600">
+                            <strong class="text-sky-800">Regla clave:</strong> No manipula filas individuales, solo el plano o molde de almacenamiento.
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta DML de Escritura -->
+                    <div class="rounded-xl border border-amber-200 bg-amber-50/40 p-4 flex flex-col justify-between">
+                        <div class="space-y-2.5">
+                            <div class="flex items-center justify-between">
+                                <span class="font-extrabold text-xs uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-1 rounded-md">2. DML (Manipulación)</span>
+                                <span class="text-[10px] font-mono text-amber-600 font-semibold">Datos / Filas</span>
+                            </div>
+                            <h4 class="font-bold text-sm text-slate-900">Inserta, actualiza o borra registros</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Alimenta y mantiene los registros vivos respetando las restricciones de integridad referencial.
+                            </p>
+                            <div class="bg-slate-900 rounded-lg p-3 font-mono text-[11px] text-slate-200 space-y-1">
+                                <div class="text-slate-400 font-bold">// Comandos: INSERT, UPDATE, DELETE</div>
+                                <div><span class="code-keyword">INSERT INTO</span> <span class="code-table">sucursales</span>(nombre, ciudad)</div>
+                                <div class="pl-3"><span class="code-keyword">VALUES</span> (<span class="text-emerald-300">'Sucursal Centro'</span>, <span class="text-emerald-300">'Bogotá'</span>);</div>
+                                <div class="pt-1"><span class="code-keyword">UPDATE</span> <span class="code-table">cuentas</span></div>
+                                <div class="pl-3"><span class="code-keyword">SET</span> <span class="code-field">saldo</span> = <span class="code-field">saldo</span> + <span class="text-emerald-300">500000</span></div>
+                                <div class="pl-3"><span class="code-keyword">WHERE</span> <span class="code-field">id_cuenta</span> = <span class="text-emerald-300">1</span>;</div>
+                                <div class="pt-1"><span class="code-keyword">DELETE FROM</span> <span class="code-table">transacciones</span> <span class="code-keyword">WHERE</span> <span class="code-field">id_transaccion</span> = <span class="text-emerald-300">99</span>;</div>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-[11px] bg-white border border-amber-100 p-2.5 rounded-lg text-slate-600">
+                            <strong class="text-amber-800">Regla clave:</strong> El orden de inserción es estricto: debes cargar tablas fuertes antes de sus hijas.
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta DQL de Consulta -->
+                    <div class="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4 flex flex-col justify-between">
+                        <div class="space-y-2.5">
+                            <div class="flex items-center justify-between">
+                                <span class="font-extrabold text-xs uppercase tracking-wider text-indigo-800 bg-indigo-100 px-2.5 py-1 rounded-md">3. DQL (Consulta / Lectura)</span>
+                                <span class="text-[10px] font-mono text-indigo-600 font-semibold">Análisis / Reportes</span>
+                            </div>
+                            <h4 class="font-bold text-sm text-slate-900">Extrae, cruza y resume información</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Es de solo lectura: no altera ni borra información. Combina tablas mediante <code class="text-indigo-900 font-bold">JOIN</code>, filtra y agrupa.
+                            </p>
+                            <div class="bg-slate-900 rounded-lg p-3 font-mono text-[11px] text-slate-200 space-y-1">
+                                <div class="text-slate-400 font-bold">// Comando principal: SELECT</div>
+                                <div><span class="code-keyword">SELECT</span> <span class="code-field">s.nombre</span>, <span class="text-pink-400">COUNT</span>(e.id_empleado)</div>
+                                <div><span class="code-keyword">FROM</span> <span class="code-table">sucursales s</span></div>
+                                <div><span class="code-keyword">LEFT JOIN</span> <span class="code-table">empleados e</span> <span class="code-keyword">ON</span> <span class="code-field">s.id_sucursal = e.id_sucursal</span></div>
+                                <div><span class="code-keyword">GROUP BY</span> <span class="code-field">s.nombre</span>;</div>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-[11px] bg-white border border-indigo-100 p-2.5 rounded-lg text-slate-600">
+                            <strong class="text-indigo-800">Regla clave:</strong> Es la base del examen práctico y de las 19 preguntas del laboratorio.
                         </div>
                     </div>
                 </div>
@@ -436,8 +536,801 @@
                 </div>
 
                 <div class="mt-6 flex justify-end">
+                    <button onclick="switchSection('ddl')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2 text-sm">
+                        <span>Siguiente: 2. DDL y Carga (bancodb)</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =================================================================== -->
+        <!-- SECCIÓN 2: DDL Y CARGA DE DATOS (BANCODB)                           -->
+        <!-- =================================================================== -->
+        <section id="sec-ddl" class="hidden space-y-8">
+            <!-- Banner Módulo 2 -->
+            <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl border border-indigo-900/50">
+                <div class="max-w-4xl">
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="inline-block bg-indigo-500/30 border border-indigo-400/40 text-indigo-200 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+                            Módulo 2 • Laboratorio Final Bancario
+                        </span>
+                        <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                            7 Tablas • 26 Registros • PostgreSQL
+                        </span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 text-white tracking-tight">Diseño Físico DDL, Carga DML y Guía de Informe</h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Aquí tienes todos los scripts y requerimientos del <strong>Laboratorio Final (bancodb)</strong> listos para ejecutar en PostgreSQL: creación de la base de datos, las 7 tablas con sus llaves primarias/foráneas en estricto orden de dependencias, la carga inicial de datos y la <strong>checklist paso a paso para el informe de resultados</strong> con las 19 consultas resueltas.
+                    </p>
+                    <div class="mt-5 flex flex-wrap gap-3">
+                        <button onclick="copyCode('code-master-script', this)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span>Copiar Script Maestro Completo (.sql)</span>
+                        </button>
+                        <a href="#ddl-checklist" class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs px-4 py-2.5 rounded-xl border border-white/20 transition flex items-center gap-2">
+                            <span>📋 Ir a Checklist de Informe (19 Consultas)</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menú de Acceso Rápido del Módulo -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-3 shadow-sm flex flex-wrap items-center gap-2 text-xs font-bold">
+                <span class="text-slate-400 uppercase text-[11px] px-2">Navegación:</span>
+                <a href="#ddl-creacion-bd" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 transition">1. Creación & Conexión</a>
+                <a href="#ddl-diagrama" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 transition">2. Árbol de Dependencias</a>
+                <a href="#ddl-tablas" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 transition">3. Sentencias DDL (7 Tablas)</a>
+                <a href="#ddl-carga" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 transition">4. Carga DML (26 Filas)</a>
+                <a href="#ddl-script-maestro" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 transition">5. Script Maestro</a>
+                <a href="#ddl-checklist" class="px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition">6. Checklist de Informe (19 Consultas)</a>
+            </div>
+
+            <!-- BLOQUE 1: Creación de BD y Conexión -->
+            <div id="ddl-creacion-bd" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-lg">
+                            1
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600">Parte 1 del PDF</span>
+                            <h3 class="text-lg font-bold text-slate-900">Creación de la Base de Datos y Conexión</h3>
+                        </div>
+                    </div>
+                    <button onclick="copyCode('code-create-db', this)" class="self-start sm:self-auto text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 border border-slate-200 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        <span>Copiar Comandos</span>
+                    </button>
+                </div>
+
+                <p class="text-sm text-slate-600">
+                    Abre tu terminal (<strong>psql</strong>) o tu herramienta gráfica favorita (<strong>pgAdmin / DBeaver</strong>) conectado con el superusuario <code>postgres</code> y ejecuta:
+                </p>
+
+                <div class="bg-slate-900 rounded-xl p-4 font-mono text-xs sm:text-sm text-slate-100 shadow-inner overflow-x-auto relative">
+                    <pre id="code-create-db"><code>-- 1. Crear la base de datos para el sistema bancario
+CREATE DATABASE bancodb;
+
+-- 2. Conectarse a la base de datos recién creada (en psql)
+\c bancodb;
+
+-- Verificación de conexión: el prompt de psql debe cambiar a bancodb=#</code></pre>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-200 p-3.5 rounded-xl text-xs text-amber-900 flex items-start gap-2.5">
+                    <span class="text-base leading-none">💡</span>
+                    <div>
+                        <strong>Tip para el examen y reporte:</strong> Si estás usando <strong>pgAdmin</strong>, haz clic derecho sobre <em>Databases</em> &rarr; <em>Create</em> &rarr; <em>Database...</em>, nómbrala <code>bancodb</code> y luego abre el <em>Query Tool</em> sobre ella. Si usas la terminal CMD de Windows, puedes conectarte directo con: <code class="bg-amber-100/70 px-1.5 py-0.5 rounded font-mono">psql -U postgres -d bancodb</code>.
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 2: Árbol de Dependencias e Integridad Referencial -->
+            <div id="ddl-diagrama" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-lg">
+                        2
+                    </div>
+                    <div>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-purple-700">Arquitectura Relacional</span>
+                        <h3 class="text-lg font-bold text-slate-900">Árbol de Dependencias y Orden de Ejecución DDL / DML</h3>
+                    </div>
+                </div>
+
+                <p class="text-sm text-slate-600">
+                    Para evitar errores de tipo <code>ERROR: relation "..." does not exist</code> o violación de llave foránea (<em>foreign key constraint</em>), las tablas deben crearse e insertarse en estricto orden jerárquico:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Nivel 1 -->
+                    <div class="border-2 border-emerald-300 bg-emerald-50/30 rounded-xl p-4 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Nivel 1 • Tablas Fuertes</span>
+                            <span class="text-[11px] text-emerald-800 font-bold">Sin FK previa</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-slate-900">1. sucursales, clientes, tipos_cuenta</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            No dependen de nadie. Contienen las entidades maestras que prestarán sus llaves primarias (<code class="font-mono">id_sucursal</code>, <code class="font-mono">id_cliente</code>, <code class="font-mono">id_tipo</code>).
+                        </p>
+                    </div>
+
+                    <!-- Nivel 2 -->
+                    <div class="border-2 border-indigo-300 bg-indigo-50/30 rounded-xl p-4 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Nivel 2 • Dependientes Directas</span>
+                            <span class="text-[11px] text-indigo-800 font-bold">FK Nivel 1</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-slate-900">2. empleados, cuentas, prestamos</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            <code class="font-mono">empleados</code> apunta a sucursales. <code class="font-mono">cuentas</code> apunta a clientes y tipos_cuenta. <code class="font-mono">prestamos</code> apunta a clientes.
+                        </p>
+                    </div>
+
+                    <!-- Nivel 3 -->
+                    <div class="border-2 border-amber-300 bg-amber-50/30 rounded-xl p-4 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Nivel 3 • Dependiente Secundaria</span>
+                            <span class="text-[11px] text-amber-800 font-bold">FK a Cuentas</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-slate-900">3. transacciones</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Cada transacción requiere obligatoriamente que la cuenta bancaria ya exista (<code class="font-mono">id_cuenta FK &rarr; cuentas</code>). Debe crearse y poblarse al final.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 3: Sentencias DDL (CREATE TABLE) -->
+            <div id="ddl-tablas" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-lg">
+                            3
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-sky-700">Parte 2 del PDF</span>
+                            <h3 class="text-lg font-bold text-slate-900">Sentencias DDL (CREATE TABLE) de las 7 Tablas</h3>
+                        </div>
+                    </div>
+                    <button onclick="copyCode('code-ddl-all', this)" class="self-start sm:self-auto text-xs font-semibold text-sky-700 bg-sky-50 hover:bg-sky-100 border border-sky-200 px-3.5 py-1.5 rounded-xl transition flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        <span>Copiar Todo el DDL</span>
+                    </button>
+                </div>
+
+                <p class="text-sm text-slate-600">
+                    Definición formal respetando los tipos de datos en PostgreSQL (<code>SERIAL PRIMARY KEY</code>, <code>NUMERIC(12,2)</code> para dinero, <code>DATE</code>, <code>TIMESTAMP</code> y restricciones de integridad <code>FOREIGN KEY</code>):
+                </p>
+
+                <!-- Grid de las 7 tablas en pestañas/tarjetas -->
+                <div class="bg-slate-900 rounded-xl p-4 font-mono text-xs sm:text-sm text-slate-100 shadow-inner overflow-x-auto">
+                    <pre id="code-ddl-all"><code>-- =========================================================================
+-- TABLA 1: sucursales (Fuerte)
+-- =========================================================================
+CREATE TABLE sucursales (
+    id_sucursal SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    ciudad VARCHAR(50) NOT NULL,
+    direccion VARCHAR(150) NOT NULL
+);
+
+-- =========================================================================
+-- TABLA 2: empleados (Depende de sucursales)
+-- =========================================================================
+CREATE TABLE empleados (
+    id_empleado SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    cargo VARCHAR(50) NOT NULL,
+    salario NUMERIC(12,2) NOT NULL,
+    id_sucursal INT NOT NULL,
+    CONSTRAINT fk_empleados_sucursal FOREIGN KEY (id_sucursal) 
+        REFERENCES sucursales(id_sucursal) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- =========================================================================
+-- TABLA 3: clientes (Fuerte)
+-- =========================================================================
+CREATE TABLE clientes (
+    id_cliente SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    telefono VARCHAR(20),
+    correo VARCHAR(100) UNIQUE,
+    ciudad VARCHAR(50) NOT NULL
+);
+
+-- =========================================================================
+-- TABLA 4: tipos_cuenta (Fuerte)
+-- =========================================================================
+CREATE TABLE tipos_cuenta (
+    id_tipo SERIAL PRIMARY KEY,
+    descripcion VARCHAR(50) NOT NULL
+);
+
+-- =========================================================================
+-- TABLA 5: cuentas (Depende de clientes y tipos_cuenta)
+-- =========================================================================
+CREATE TABLE cuentas (
+    id_cuenta SERIAL PRIMARY KEY,
+    numero_cuenta VARCHAR(20) UNIQUE NOT NULL,
+    saldo NUMERIC(12,2) NOT NULL DEFAULT 0.00,
+    fecha_apertura DATE NOT NULL,
+    estado VARCHAR(20) NOT NULL DEFAULT 'Activa',
+    id_cliente INT NOT NULL,
+    id_tipo INT NOT NULL,
+    CONSTRAINT fk_cuentas_cliente FOREIGN KEY (id_cliente) 
+        REFERENCES clientes(id_cliente) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_cuentas_tipo FOREIGN KEY (id_tipo) 
+        REFERENCES tipos_cuenta(id_tipo) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- =========================================================================
+-- TABLA 6: transacciones (Depende de cuentas)
+-- =========================================================================
+CREATE TABLE transacciones (
+    id_transaccion SERIAL PRIMARY KEY,
+    tipo VARCHAR(30) NOT NULL,
+    monto NUMERIC(12,2) NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id_cuenta INT NOT NULL,
+    CONSTRAINT fk_transacciones_cuenta FOREIGN KEY (id_cuenta) 
+        REFERENCES cuentas(id_cuenta) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- =========================================================================
+-- TABLA 7: prestamos (Depende de clientes)
+-- =========================================================================
+CREATE TABLE prestamos (
+    id_prestamo SERIAL PRIMARY KEY,
+    monto NUMERIC(12,2) NOT NULL,
+    tasa_interes NUMERIC(5,2) NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    cuotas INT NOT NULL,
+    id_cliente INT NOT NULL,
+    CONSTRAINT fk_prestamos_cliente FOREIGN KEY (id_cliente) 
+        REFERENCES clientes(id_cliente) ON DELETE RESTRICT ON UPDATE CASCADE
+);</code></pre>
+                </div>
+            </div>
+
+            <!-- BLOQUE 4: Inserción de Datos (DML) -->
+            <div id="ddl-carga" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg">
+                            4
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-700">Parte 3 del PDF</span>
+                            <h3 class="text-lg font-bold text-slate-900">Sentencias DML (INSERT INTO) de Todos los Registros</h3>
+                        </div>
+                    </div>
+                    <button onclick="copyCode('code-dml-all', this)" class="self-start sm:self-auto text-xs font-semibold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-3.5 py-1.5 rounded-xl transition flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        <span>Copiar Todo el DML</span>
+                    </button>
+                </div>
+
+                <p class="text-sm text-slate-600">
+                    Carga completa de los <strong>26 registros oficiales</strong> del laboratorio, siguiendo rigurosamente el orden de dependencias:
+                </p>
+
+                <div class="bg-slate-900 rounded-xl p-4 font-mono text-xs sm:text-sm text-slate-100 shadow-inner overflow-x-auto">
+                    <pre id="code-dml-all"><code>-- 1. Insertar sucursales (3 registros)
+INSERT INTO sucursales(nombre, ciudad, direccion) VALUES
+('Sucursal Centro', 'Bogotá', 'Cra 10 #20-30'),
+('Sucursal Norte', 'Medellín', 'Calle 50 #40-20'),
+('Sucursal Sur', 'Cali', 'Av 5 Norte #12-10');
+
+-- 2. Insertar clientes (5 registros)
+INSERT INTO clientes(nombre, apellido, telefono, correo, ciudad) VALUES
+('Juan', 'Rodríguez', '3001112233', 'juan@gmail.com', 'Bogotá'),
+('María', 'López', '3004445566', 'maria@gmail.com', 'Cali'),
+('Pedro', 'Martínez', '3019998877', 'pedro@gmail.com', 'Medellín'),
+('Laura', 'García', '3025556677', 'laura@gmail.com', 'Pasto'),
+('Camila', 'Fernández', '3048887766', 'camila@gmail.com', 'Bogotá');
+
+-- 3. Insertar tipos de cuenta (2 registros)
+INSERT INTO tipos_cuenta(descripcion) VALUES
+('Ahorros'),
+('Corriente');
+
+-- 4. Insertar empleados (4 registros)
+INSERT INTO empleados(nombre, cargo, salario, id_sucursal) VALUES
+('Carlos Pérez', 'Gerente', 8500000, 1),
+('Ana Torres', 'Asesor', 3500000, 1),
+('Luis Gómez', 'Cajero', 2800000, 2),
+('Martha Díaz', 'Asesor', 4200000, 3);
+
+-- 5. Insertar cuentas bancarias (5 registros)
+INSERT INTO cuentas(numero_cuenta, saldo, fecha_apertura, estado, id_cliente, id_tipo) VALUES
+('20001', 5000000, '2024-01-10', 'Activa', 1, 1),
+('20002', 1200000, '2024-02-11', 'Activa', 2, 2),
+('20003', 9500000, '2024-03-15', 'Activa', 3, 1),
+('20004', 850000, '2024-03-20', 'Bloqueada', 4, 2),
+('20005', 15000000, '2024-04-05', 'Activa', 5, 1);
+
+-- 6. Insertar transacciones financieras (6 registros)
+INSERT INTO transacciones(tipo, monto, id_cuenta) VALUES
+('Deposito', 500000, 1),
+('Retiro', 200000, 1),
+('Transferencia', 1000000, 2),
+('Deposito', 800000, 3),
+('Retiro', 350000, 4),
+('Deposito', 1500000, 5);
+
+-- 7. Insertar préstamos bancarios (3 registros)
+INSERT INTO prestamos(monto, tasa_interes, fecha_inicio, cuotas, id_cliente) VALUES
+(10000000, 12.5, '2024-01-15', 24, 1),
+(5000000, 10.2, '2024-02-20', 12, 2),
+(15000000, 15.0, '2024-03-10', 36, 3);</code></pre>
+                </div>
+
+                <!-- Query de Verificación Rápida -->
+                <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                            <span>🔍 Query de Verificación Rápida de Registros</span>
+                        </span>
+                        <button onclick="copyCode('code-check-counts', this)" class="text-[11px] font-semibold text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg transition">
+                            Copiar Comprobación
+                        </button>
+                    </div>
+                    <pre id="code-check-counts" class="bg-slate-900 text-emerald-300 p-3 rounded-lg font-mono text-xs overflow-x-auto"><code>SELECT 'sucursales' AS tabla, COUNT(*) AS total FROM sucursales
+UNION ALL SELECT 'empleados', COUNT(*) FROM empleados
+UNION ALL SELECT 'clientes', COUNT(*) FROM clientes
+UNION ALL SELECT 'tipos_cuenta', COUNT(*) FROM tipos_cuenta
+UNION ALL SELECT 'cuentas', COUNT(*) FROM cuentas
+UNION ALL SELECT 'transacciones', COUNT(*) FROM transacciones
+UNION ALL SELECT 'prestamos', COUNT(*) FROM prestamos;</code></pre>
+                    <p class="text-[11px] text-slate-500">Debe devolver: sucursales (3), empleados (4), clientes (5), tipos_cuenta (2), cuentas (5), transacciones (6), prestamos (3). Total: 26 registros.</p>
+                </div>
+            </div>
+
+            <!-- BLOQUE 5: Script Maestro Completo Listo para Ejecutar -->
+            <div id="ddl-script-maestro" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg">
+                            5
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Archivo .sql Completo</span>
+                            <h3 class="text-lg font-bold text-slate-900">Script Maestro Listo (setup_bancodb.sql)</h3>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="copyCode('code-master-script', this)" class="text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span>Copiar Script Completo</span>
+                        </button>
+                    </div>
+                </div>
+
+                <p class="text-sm text-slate-600">
+                    Puedes pegar todo este bloque en el Query Tool de pgAdmin o ejecutarlo desde la terminal con: <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-indigo-700">psql -U postgres -d bancodb -f setup_bancodb.sql</code>. Incluye borrado preventivo seguro (<code class="font-mono">DROP TABLE IF EXISTS ... CASCADE</code>).
+                </p>
+
+                <div class="bg-slate-900 rounded-xl p-4 font-mono text-xs text-slate-100 shadow-inner max-h-96 overflow-y-auto">
+                    <pre id="code-master-script"><code>-- =============================================================================
+-- LABORATORIO FINAL BASES DE DATOS - BANCODB
+-- Script Maestro Oficial DDL + DML Completo
+-- =============================================================================
+
+-- 1. Limpieza preventiva
+DROP TABLE IF EXISTS transacciones CASCADE;
+DROP TABLE IF EXISTS prestamos CASCADE;
+DROP TABLE IF EXISTS cuentas CASCADE;
+DROP TABLE IF EXISTS empleados CASCADE;
+DROP TABLE IF EXISTS tipos_cuenta CASCADE;
+DROP TABLE IF EXISTS clientes CASCADE;
+DROP TABLE IF EXISTS sucursales CASCADE;
+
+-- 2. DDL - Creación de Tablas (Orden de Dependencias)
+CREATE TABLE sucursales (
+    id_sucursal SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    ciudad VARCHAR(50) NOT NULL,
+    direccion VARCHAR(150) NOT NULL
+);
+
+CREATE TABLE empleados (
+    id_empleado SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    cargo VARCHAR(50) NOT NULL,
+    salario NUMERIC(12,2) NOT NULL,
+    id_sucursal INT NOT NULL,
+    CONSTRAINT fk_empleados_sucursal FOREIGN KEY (id_sucursal) 
+        REFERENCES sucursales(id_sucursal) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE clientes (
+    id_cliente SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    telefono VARCHAR(20),
+    correo VARCHAR(100) UNIQUE,
+    ciudad VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE tipos_cuenta (
+    id_tipo SERIAL PRIMARY KEY,
+    descripcion VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE cuentas (
+    id_cuenta SERIAL PRIMARY KEY,
+    numero_cuenta VARCHAR(20) UNIQUE NOT NULL,
+    saldo NUMERIC(12,2) NOT NULL DEFAULT 0.00,
+    fecha_apertura DATE NOT NULL,
+    estado VARCHAR(20) NOT NULL DEFAULT 'Activa',
+    id_cliente INT NOT NULL,
+    id_tipo INT NOT NULL,
+    CONSTRAINT fk_cuentas_cliente FOREIGN KEY (id_cliente) 
+        REFERENCES clientes(id_cliente) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_cuentas_tipo FOREIGN KEY (id_tipo) 
+        REFERENCES tipos_cuenta(id_tipo) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE transacciones (
+    id_transaccion SERIAL PRIMARY KEY,
+    tipo VARCHAR(30) NOT NULL,
+    monto NUMERIC(12,2) NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id_cuenta INT NOT NULL,
+    CONSTRAINT fk_transacciones_cuenta FOREIGN KEY (id_cuenta) 
+        REFERENCES cuentas(id_cuenta) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE prestamos (
+    id_prestamo SERIAL PRIMARY KEY,
+    monto NUMERIC(12,2) NOT NULL,
+    tasa_interes NUMERIC(5,2) NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    cuotas INT NOT NULL,
+    id_cliente INT NOT NULL,
+    CONSTRAINT fk_prestamos_cliente FOREIGN KEY (id_cliente) 
+        REFERENCES clientes(id_cliente) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- 3. DML - Inserción de Datos Oficiales
+INSERT INTO sucursales(nombre, ciudad, direccion) VALUES
+('Sucursal Centro', 'Bogotá', 'Cra 10 #20-30'),
+('Sucursal Norte', 'Medellín', 'Calle 50 #40-20'),
+('Sucursal Sur', 'Cali', 'Av 5 Norte #12-10');
+
+INSERT INTO clientes(nombre, apellido, telefono, correo, ciudad) VALUES
+('Juan', 'Rodríguez', '3001112233', 'juan@gmail.com', 'Bogotá'),
+('María', 'López', '3004445566', 'maria@gmail.com', 'Cali'),
+('Pedro', 'Martínez', '3019998877', 'pedro@gmail.com', 'Medellín'),
+('Laura', 'García', '3025556677', 'laura@gmail.com', 'Pasto'),
+('Camila', 'Fernández', '3048887766', 'camila@gmail.com', 'Bogotá');
+
+INSERT INTO tipos_cuenta(descripcion) VALUES
+('Ahorros'),
+('Corriente');
+
+INSERT INTO empleados(nombre, cargo, salario, id_sucursal) VALUES
+('Carlos Pérez', 'Gerente', 8500000, 1),
+('Ana Torres', 'Asesor', 3500000, 1),
+('Luis Gómez', 'Cajero', 2800000, 2),
+('Martha Díaz', 'Asesor', 4200000, 3);
+
+INSERT INTO cuentas(numero_cuenta, saldo, fecha_apertura, estado, id_cliente, id_tipo) VALUES
+('20001', 5000000, '2024-01-10', 'Activa', 1, 1),
+('20002', 1200000, '2024-02-11', 'Activa', 2, 2),
+('20003', 9500000, '2024-03-15', 'Activa', 3, 1),
+('20004', 850000, '2024-03-20', 'Bloqueada', 4, 2),
+('20005', 15000000, '2024-04-05', 'Activa', 5, 1);
+
+INSERT INTO transacciones(tipo, monto, id_cuenta) VALUES
+('Deposito', 500000, 1),
+('Retiro', 200000, 1),
+('Transferencia', 1000000, 2),
+('Deposito', 800000, 3),
+('Retiro', 350000, 4),
+('Deposito', 1500000, 5);
+
+INSERT INTO prestamos(monto, tasa_interes, fecha_inicio, cuotas, id_cliente) VALUES
+(10000000, 12.5, '2024-01-15', 24, 1),
+(5000000, 10.2, '2024-02-20', 12, 2),
+(15000000, 15.0, '2024-03-10', 36, 3);</code></pre>
+                </div>
+            </div>
+
+            <!-- BLOQUE 6: Mini Checklist para Armar el Informe de Resultados Paso a Paso -->
+            <div id="ddl-checklist" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-lg">
+                            📋
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-rose-700">Requisito de Entrega</span>
+                            <h3 class="text-lg font-bold text-slate-900">Checklist para el Informe de Resultados Paso a Paso</h3>
+                        </div>
+                    </div>
+                    <span class="bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold px-3 py-1.5 rounded-lg self-start sm:self-auto">
+                        "Entrega un informe detallado con los resultados"
+                    </span>
+                </div>
+
+                <p class="text-sm text-slate-600">
+                    Sigue esta lista de verificación interactiva para estructurar tu documento de entrega (Word/PDF). Marca cada casilla a medida que captures tus evidencias:
+                </p>
+
+                <!-- Checklist Interactivo -->
+                <div class="space-y-4">
+                    <!-- Item 1 -->
+                    <div class="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 transition bg-slate-50/50">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" class="mt-1 w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+                            <div class="space-y-1">
+                                <span class="font-bold text-sm text-slate-900">Paso 1: Evidencia de Creación y Conexión a la Base de Datos</span>
+                                <p class="text-xs text-slate-500">Captura de pantalla de la terminal o pgAdmin ejecutando <code>CREATE DATABASE bancodb;</code> y el comando de conexión <code>\c bancodb</code> mostrando el prompt <code>bancodb=#</code>.</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 transition bg-slate-50/50">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" class="mt-1 w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+                            <div class="space-y-1">
+                                <span class="font-bold text-sm text-slate-900">Paso 2: Evidencia de Creación de las 7 Tablas (DDL)</span>
+                                <p class="text-xs text-slate-500">Captura del comando <code>\dt</code> en psql mostrando las 7 tablas creadas: <code>sucursales</code>, <code>empleados</code>, <code>clientes</code>, <code>tipos_cuenta</code>, <code>cuentas</code>, <code>transacciones</code> y <code>prestamos</code>.</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 transition bg-slate-50/50">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" class="mt-1 w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+                            <div class="space-y-1">
+                                <span class="font-bold text-sm text-slate-900">Paso 3: Evidencia de Llaves Foráneas e Integridad Referencial</span>
+                                <p class="text-xs text-slate-500">Captura ejecutando <code>\d cuentas</code> y <code>\d transacciones</code> donde se visualicen explícitamente los <em>Foreign-key constraints</em> apuntando a las tablas maestras.</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 transition bg-slate-50/50">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" class="mt-1 w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+                            <div class="space-y-1">
+                                <span class="font-bold text-sm text-slate-900">Paso 4: Evidencia de Inserción de Datos (DML)</span>
+                                <p class="text-xs text-slate-500">Captura de la ejecución de la consulta de conteo con <code>UNION ALL</code> mostrando que se cargaron los 26 registros con éxito.</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Item 5: Las 19 Consultas de Resultados -->
+                    <div class="border-2 border-indigo-200 bg-indigo-50/20 rounded-xl p-4 space-y-3">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" class="mt-1 w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+                            <div class="space-y-1">
+                                <span class="font-bold text-sm text-indigo-950">Paso 5: Evidencia de las 19 Consultas de Resultados del Laboratorio</span>
+                                <p class="text-xs text-indigo-800">Cada consulta debe incluir: 1) Enunciado, 2) Código SQL ejecutado, 3) Captura del resultado tabular devuelto por PostgreSQL, y 4) Breve explicación técnica del resultado.</p>
+                            </div>
+                        </label>
+
+                        <!-- Acordeón Desplegable de las 19 Consultas -->
+                        <div class="mt-3 bg-white rounded-xl border border-indigo-100 overflow-hidden divide-y divide-slate-100 text-xs">
+                            <div class="bg-indigo-600 text-white font-bold p-3 flex justify-between items-center">
+                                <span>Solucionario de las 19 Consultas para tu Informe</span>
+                                <span class="text-[11px] font-normal opacity-90">Datos exactos esperados</span>
+                            </div>
+
+                            <!-- Q1 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>1. Clientes ordenados por ciudad (ORDER BY)</span>
+                                    <span class="text-indigo-600 font-mono">ORDER BY ciudad</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT nombre, apellido, ciudad FROM clientes ORDER BY ciudad;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> 5 filas. Bogotá (Camila, Juan), Cali (María), Medellín (Pedro), Pasto (Laura).</p>
+                            </div>
+
+                            <!-- Q2 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>2. Cuentas con saldo superior a 5 millones</span>
+                                    <span class="text-indigo-600 font-mono">WHERE saldo &gt; 5000000</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT * FROM cuentas WHERE saldo &gt; 5000000;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> 2 filas (Cuenta 20003 con $9,500,000 y 20005 con $15,000,000).</p>
+                            </div>
+
+                            <!-- Q3 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>3. Total de clientes registrados</span>
+                                    <span class="text-indigo-600 font-mono">COUNT(*)</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT COUNT(*) AS total_clientes FROM clientes;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> 1 fila (total_clientes = 5).</p>
+                            </div>
+
+                            <!-- Q4 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>4. Salario promedio de los empleados</span>
+                                    <span class="text-indigo-600 font-mono">AVG(salario)</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT AVG(salario) AS salario_promedio FROM empleados;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> 1 fila (salario_promedio = 4750000.00).</p>
+                            </div>
+
+                            <!-- Q5 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>5. Clientes junto con su número de cuenta (JOIN)</span>
+                                    <span class="text-indigo-600 font-mono">JOIN cuentas ON c.id = cu.id_cliente</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT c.nombre, c.apellido, cu.numero_cuenta FROM clientes c JOIN cuentas cu ON c.id_cliente = cu.id_cliente;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> 5 filas (Juan-20001, María-20002, Pedro-20003, Laura-20004, Camila-20005).</p>
+                            </div>
+
+                            <!-- Q6 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>6. Clientes y el tipo de cuenta que poseen (JOIN 3 tablas)</span>
+                                    <span class="text-indigo-600 font-mono">clientes + cuentas + tipos_cuenta</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT c.nombre, c.apellido, tc.descripcion AS tipo_cuenta FROM clientes c JOIN cuentas cu ON c.id_cliente = cu.id_cliente JOIN tipos_cuenta tc ON cu.id_tipo = tc.id_tipo;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> 5 filas. Juan (Ahorros), María (Corriente), Pedro (Ahorros), Laura (Corriente), Camila (Ahorros).</p>
+                            </div>
+
+                            <!-- Q7 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>7. Empleados y la sucursal donde trabajan (JOIN)</span>
+                                    <span class="text-indigo-600 font-mono">empleados + sucursales</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT e.nombre, e.cargo, s.nombre AS sucursal FROM empleados e JOIN sucursales s ON e.id_sucursal = s.id_sucursal;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> 4 empleados vinculados a Sucursal Centro (2), Sucursal Norte (1) y Sucursal Sur (1).</p>
+                            </div>
+
+                            <!-- Q8 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>8. Clientes con préstamos y valor del préstamo (JOIN)</span>
+                                    <span class="text-indigo-600 font-mono">clientes + prestamos</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT c.nombre, c.apellido, p.monto AS valor_prestamo FROM clientes c JOIN prestamos p ON c.id_cliente = p.id_cliente;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> 3 filas (Juan $10M, María $5M, Pedro $15M).</p>
+                            </div>
+
+                            <!-- Q9 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>9. Todas las transacciones por cada cliente (JOIN 3 tablas)</span>
+                                    <span class="text-indigo-600 font-mono">clientes + cuentas + transacciones</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT c.nombre, c.apellido, t.id_transaccion, t.tipo, t.monto FROM clientes c JOIN cuentas cu ON c.id_cliente = cu.id_cliente JOIN transacciones t ON cu.id_cuenta = t.id_cuenta;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> 6 filas detallando cada depósito, retiro o transferencia.</p>
+                            </div>
+
+                            <!-- Q10 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>10. Cuántos clientes existen por ciudad (GROUP BY)</span>
+                                    <span class="text-indigo-600 font-mono">GROUP BY ciudad</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT ciudad, COUNT(*) AS total_clientes FROM clientes GROUP BY ciudad;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> Bogotá: 2, Cali: 1, Medellín: 1, Pasto: 1.</p>
+                            </div>
+
+                            <!-- Q11 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>11. Monto total agrupado por tipo de transacción (GROUP BY)</span>
+                                    <span class="text-indigo-600 font-mono">SUM(monto) GROUP BY tipo</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT tipo, SUM(monto) AS monto_total FROM transacciones GROUP BY tipo;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> Deposito ($2,800,000), Retiro ($550,000), Transferencia ($1,000,000).</p>
+                            </div>
+
+                            <!-- Q12 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>12. Saldo promedio por tipo de cuenta (JOIN + GROUP BY)</span>
+                                    <span class="text-indigo-600 font-mono">AVG(cu.saldo)</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT tc.descripcion AS tipo_cuenta, AVG(cu.saldo) AS saldo_promedio FROM tipos_cuenta tc JOIN cuentas cu ON tc.id_tipo = cu.id_tipo GROUP BY tc.descripcion;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> Ahorros ($9,833,333.33), Corriente ($1,025,000.00).</p>
+                            </div>
+
+                            <!-- Q13 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>13. Cuántos empleados tiene cada sucursal (JOIN + GROUP BY)</span>
+                                    <span class="text-indigo-600 font-mono">COUNT(e.id_empleado)</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT s.nombre AS sucursal, COUNT(e.id_empleado) AS total_empleados FROM sucursales s JOIN empleados e ON s.id_sucursal = e.id_sucursal GROUP BY s.nombre;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> Sucursal Centro: 2, Sucursal Norte: 1, Sucursal Sur: 1.</p>
+                            </div>
+
+                            <!-- Q14 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>14. Saldo total agrupado por ciudad (JOIN + GROUP BY)</span>
+                                    <span class="text-indigo-600 font-mono">SUM(cu.saldo)</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT c.ciudad, SUM(cu.saldo) AS saldo_total FROM clientes c JOIN cuentas cu ON c.id_cliente = cu.id_cliente GROUP BY c.ciudad;</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> Bogotá ($20,000,000), Medellín ($9,500,000), Cali ($1,200,000), Pasto ($850,000).</p>
+                            </div>
+
+                            <!-- Q15 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>15. Clientes que poseen préstamos (WHERE con Subconsulta)</span>
+                                    <span class="text-indigo-600 font-mono">WHERE id_cliente IN (SELECT ...)</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT * FROM clientes WHERE id_cliente IN (SELECT id_cliente FROM prestamos);</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> 3 clientes (Juan, María y Pedro).</p>
+                            </div>
+
+                            <!-- Q16 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>16. Cuentas con saldo superior al promedio general (WHERE)</span>
+                                    <span class="text-indigo-600 font-mono">WHERE saldo &gt; (SELECT AVG...)</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT * FROM cuentas WHERE saldo &gt; (SELECT AVG(saldo) FROM cuentas);</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> Promedio es $6,310,000. Devuelve cuentas 20003 ($9.5M) y 20005 ($15M).</p>
+                            </div>
+
+                            <!-- Q17 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>17. Empleado con el salario más alto (WHERE)</span>
+                                    <span class="text-indigo-600 font-mono">WHERE salario = (SELECT MAX...)</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT * FROM empleados WHERE salario = (SELECT MAX(salario) FROM empleados);</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> Carlos Pérez (Gerente, salario = $8,500,000).</p>
+                            </div>
+
+                            <!-- Q18 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>18. Clientes que NO poseen préstamos (WHERE)</span>
+                                    <span class="text-indigo-600 font-mono">WHERE id_cliente NOT IN (SELECT ...)</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT * FROM clientes WHERE id_cliente NOT IN (SELECT id_cliente FROM prestamos);</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> Laura García (Pasto) y Camila Fernández (Bogotá).</p>
+                            </div>
+
+                            <!-- Q19 -->
+                            <div class="p-3 space-y-1 hover:bg-slate-50">
+                                <div class="flex justify-between font-bold text-slate-800">
+                                    <span>19. Cuenta con el menor saldo (WHERE)</span>
+                                    <span class="text-indigo-600 font-mono">WHERE saldo = (SELECT MIN...)</span>
+                                </div>
+                                <code class="block font-mono bg-slate-900 text-slate-200 p-2 rounded text-[11px]">SELECT * FROM cuentas WHERE saldo = (SELECT MIN(saldo) FROM cuentas);</code>
+                                <p class="text-[11px] text-slate-500"><strong>Resultado devuelto:</strong> Cuenta 20004 (Laura García, saldo = $850,000).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 6 -->
+                    <div class="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 transition bg-slate-50/50">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" class="mt-1 w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+                            <div class="space-y-1">
+                                <span class="font-bold text-sm text-slate-900">Paso 6: Estructura Final del Informe de Entrega</span>
+                                <p class="text-xs text-slate-500">Asegúrate de incluir: Portada institucional (UCC), Introducción/Objetivos, Desarrollo secuencial de los 5 pasos con capturas recortadas y legibles, y Conclusiones sobre la integridad referencial y el rendimiento de las consultas.</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end">
                     <button onclick="switchSection('laboratorio')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2 text-sm">
-                        <span>Siguiente: Laboratorio Visual de JOINs</span>
+                        <span>Siguiente: 3. Laboratorio Visual de JOINs</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                     </button>
                 </div>
@@ -445,13 +1338,13 @@
         </section>
 
         <!-- =================================================================== -->
-        <!-- SECCIÓN 2: LABORATORIO VISUAL DE JOINS                              -->
+        <!-- SECCIÓN 3: LABORATORIO VISUAL DE JOINS                              -->
         <!-- =================================================================== -->
         <section id="sec-laboratorio" class="hidden space-y-6">
             <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
                 <div class="max-w-3xl mb-6">
                     <span class="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2">
-                        Paso 2 • Laboratorio Interactivo
+                        Paso 3 • Laboratorio Interactivo
                     </span>
                     <h2 class="text-2xl font-extrabold text-slate-900">¿Cómo funciona cada JOIN con datos reales?</h2>
                     <p class="text-sm text-slate-600 mt-1">
@@ -749,12 +1642,12 @@ INNER JOIN inscripciones i ON e.id_estudiante = i.id_estudiante;</pre>
         </section>
 
         <!-- =================================================================== -->
-        <!-- SECCIÓN 4: ESTRATEGIA PARA EL EXAMEN FRENTE AL PROFESOR             -->
+        <!-- SECCIÓN 5: ESTRATEGIA PARA EL EXAMEN FRENTE AL PROFESOR             -->
         <!-- =================================================================== -->
         <section id="sec-estrategia" class="hidden space-y-6">
             <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
                 <span class="inline-block bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2">
-                    Paso 4 • Protocolo Anti-Bloqueo
+                    Paso 5 • Protocolo Anti-Bloqueo
                 </span>
                 <h2 class="text-2xl font-extrabold text-slate-900 mb-2">Qué hacer exactamente cuando pases al puesto del profesor</h2>
                 <p class="text-sm text-slate-600 mb-6">Cuando el profesor está mirando tu pantalla es normal ponerse nervioso. Sigue estos 5 pasos mecánicos en orden y nunca te quedarás en blanco.</p>
@@ -838,18 +1731,46 @@ INNER JOIN inscripciones i ON e.id_estudiante = i.id_estudiante;</pre>
         // 1. NAVEGACIÓN ENTRE PESTAÑAS PRINCIPALES
         // =========================================================================
         function switchSection(sectionId) {
-            const sections = ['fundamentos', 'laboratorio', 'simulador', 'estrategia'];
+            const sections = ['fundamentos', 'ddl', 'laboratorio', 'simulador', 'estrategia'];
             sections.forEach(id => {
-                document.getElementById(`sec-${id}`).classList.add('hidden');
+                const sec = document.getElementById(`sec-${id}`);
+                if (sec) sec.classList.add('hidden');
                 const btn = document.getElementById(`nav-${id}`);
-                btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
-                btn.classList.add('text-slate-600');
+                if (btn) {
+                    btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
+                    btn.classList.add('text-slate-600');
+                }
             });
 
-            document.getElementById(`sec-${sectionId}`).classList.remove('hidden');
+            const activeSec = document.getElementById(`sec-${sectionId}`);
+            if (activeSec) activeSec.classList.remove('hidden');
             const activeBtn = document.getElementById(`nav-${sectionId}`);
-            activeBtn.classList.remove('text-slate-600');
-            activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-600');
+                activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Función para copiar bloques de código al portapapeles
+        function copyCode(elementId, btn) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            const text = el.innerText || el.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = `
+                    <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span class="text-emerald-700 font-bold">¡Copiado!</span>
+                `;
+                btn.classList.add('bg-emerald-50', 'border-emerald-300');
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.classList.remove('bg-emerald-50', 'border-emerald-300');
+                }, 2000);
+            }).catch(err => {
+                console.error("Error al copiar:", err);
+            });
         }
 
         // =========================================================================
