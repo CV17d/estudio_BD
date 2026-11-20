@@ -72,7 +72,7 @@
                         3. Laboratorio JOINs
                     </button>
                     <button onclick="switchSection('simulador')" id="nav-simulador" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5 whitespace-nowrap">
-                        <span>4. Examen Real (12 Retos)</span>
+                        <span>4. Examen Real (20 Retos)</span>
                         <span class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded-full font-bold">Pro</span>
                     </button>
                     <button onclick="switchSection('estrategia')" id="nav-estrategia" class="nav-btn flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
@@ -1281,8 +1281,8 @@ INNER JOIN inscripciones i ON e.id_estudiante = i.id_estudiante;</pre>
                             <span id="progress-badge" class="text-xs font-bold text-slate-500">Reto 1 de 12</span>
                         </div>
                         
-                        <!-- Selector de los 12 Retos organizados por tema -->
-                        <div class="grid grid-cols-3 sm:grid-cols-4 gap-1.5 mb-4">
+                        <!-- Selector de los 20 Retos organizados por tema -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-1.5 mb-4">
                             <button onclick="loadChallenge(0)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-indigo-600 text-white text-center">1. INNER 2T</button>
                             <button onclick="loadChallenge(1)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">2. INNER 3T</button>
                             <button onclick="loadChallenge(2)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">3. LEFT JOIN</button>
@@ -1292,9 +1292,17 @@ INNER JOIN inscripciones i ON e.id_estudiante = i.id_estudiante;</pre>
                             <button onclick="loadChallenge(6)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">7. Banco 3T</button>
                             <button onclick="loadChallenge(7)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">8. JOIN+GROUP</button>
                             <button onclick="loadChallenge(8)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">9. Banco COUNT</button>
-                            <button onclick="loadChallenge(9)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">10. Subconsulta</button>
+                            <button onclick="loadChallenge(9)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">10. Subcon AVG</button>
                             <button onclick="loadChallenge(10)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">11. Libros NULL</button>
                             <button onclick="loadChallenge(11)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">12. HAVING</button>
+                            <button onclick="loadChallenge(12)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">13. Filtro LIKE</button>
+                            <button onclick="loadChallenge(13)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">14. BETWEEN</button>
+                            <button onclick="loadChallenge(14)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">15. NOT IN</button>
+                            <button onclick="loadChallenge(15)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">16. Subcon MAX</button>
+                            <button onclick="loadChallenge(16)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">17. SUM+COUNT</button>
+                            <button onclick="loadChallenge(17)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">18. SUM+ORDER</button>
+                            <button onclick="loadChallenge(18)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">19. Subcon IN</button>
+                            <button onclick="loadChallenge(19)" class="chal-pill px-2 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-center">20. WHERE+ASC</button>
                         </div>
 
                         <div class="bg-slate-50 border-l-4 border-indigo-600 p-4 rounded-r-xl mb-4">
@@ -1737,6 +1745,7 @@ INNER JOIN inscripciones i ON e.id_estudiante = i.id_estudiante;</pre>
                     <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">cuentas (cu):</span> <span class="text-slate-600">id_cuenta (PK), numero_cuenta, saldo, fecha_apertura, estado, id_cliente (FK), id_tipo (FK)</span></div>
                     <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">tipos_cuenta (tc):</span> <span class="text-slate-600">id_tipo (PK), descripcion ('Ahorros', 'Corriente')</span></div>
                     <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">transacciones (tr):</span> <span class="text-slate-600">id_transaccion (PK), tipo, monto, fecha, id_cuenta (FK)</span></div>
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">prestamos (pr):</span> <span class="text-slate-600">id_prestamo (PK), monto, tasa_interes, fecha_inicio, cuotas, id_cliente (FK)</span></div>
                     <div class="p-2 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-indigo-700">sucursales (su) / empleados (em):</span> <span class="text-slate-600">su(id_sucursal, nombre, ciudad) | em(id_empleado, nombre, cargo, salario, id_sucursal)</span></div>
                 `
             },
@@ -2001,6 +2010,169 @@ INNER JOIN inscripciones i ON e.id_estudiante = i.id_estudiante;</pre>
                     ['1', '2'],
                     ['2', '2'],
                     ['3', '2']
+                ]
+            }
+
+            },
+            {
+                schema: 'uni',
+                prompt: '[Filtro de Texto LIKE] "Mostrar el nombre, apellido y correo de los estudiantes cuyo correo electrónico sea de dominio \'@gmail.com\'."',
+                cols: 'nombre, apellido, correo',
+                hint: 'Usa la cláusula WHERE con el operador LIKE y comodines: WHERE correo LIKE \'%@gmail.com\'.',
+                solution: `SELECT nombre, apellido, correo\nFROM estudiantes\nWHERE correo LIKE '%@gmail.com';`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('select')) return { ok: false, msg: 'Falta la cláusula SELECT.' };
+                    if (!s.includes('nombre') || !s.includes('apellido') || !s.includes('correo')) {
+                        return { ok: false, msg: 'Debes proyectar nombre, apellido y correo.' };
+                    }
+                    if (!s.includes('estudiantes')) return { ok: false, msg: 'Consulta sobre la tabla estudiantes.' };
+                    if (!s.includes('where') || !s.includes('like')) return { ok: false, msg: 'Debes usar WHERE ... LIKE para filtrar coincidencias parciales de texto.' };
+                    if (!s.includes('%@gmail.com')) return { ok: false, msg: 'Recuerda usar el comodín % antes del dominio: \'%@gmail.com\'.' };
+                    return { ok: true, msg: '¡Excelente! Dominas el operador de texto LIKE con comodines %.' };
+                },
+                previewHeaders: ['nombre', 'apellido', 'correo'],
+                previewRows: [
+                    ['Carlos', 'Perez', 'carlos@gmail.com'],
+                    ['Maria', 'Torres', 'maria@gmail.com'],
+                    ['Juan', 'Gomez', 'juan@gmail.com']
+                ]
+            },
+            {
+                schema: 'banco',
+                prompt: '[Filtro por Rango BETWEEN] "Mostrar el nombre, cargo y salario de los empleados que ganen entre $3,000,000 y $8,000,000 inclusive."',
+                cols: 'nombre, cargo, salario',
+                hint: 'Filtra con BETWEEN: WHERE salario BETWEEN 3000000 AND 8000000 (o usando >= y <=).',
+                solution: `SELECT nombre, cargo, salario\nFROM empleados\nWHERE salario BETWEEN 3000000 AND 8000000;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('empleados')) return { ok: false, msg: 'Consulta sobre la tabla empleados.' };
+                    if (!s.includes('salario')) return { ok: false, msg: 'Debes evaluar la columna salario.' };
+                    if (!s.includes('between') && !s.includes('and')) return { ok: false, msg: 'Usa BETWEEN 3000000 AND 8000000 para filtrar un rango numérico.' };
+                    return { ok: true, msg: '¡Muy bien! BETWEEN filtra rangos continuos de forma clara y limpia.' };
+                },
+                previewHeaders: ['nombre', 'cargo', 'salario'],
+                previewRows: [
+                    ['Ana Torres', 'Asesor', '3500000.00'],
+                    ['Martha Díaz', 'Asesor', '4200000.00']
+                ]
+            },
+            {
+                schema: 'banco',
+                prompt: '[Lab Final Banco #18] "Mostrar el nombre y apellido de los clientes que NO poseen ningún préstamo registrado en el banco (utilizar subconsulta con NOT IN)."',
+                cols: 'nombre, apellido',
+                hint: 'Usa una subconsulta en el WHERE: WHERE id_cliente NOT IN (SELECT id_cliente FROM prestamos).',
+                solution: `SELECT nombre, apellido\nFROM clientes\nWHERE id_cliente NOT IN (SELECT id_cliente FROM prestamos);`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('clientes')) return { ok: false, msg: 'Consulta principal sobre la tabla clientes.' };
+                    if (!s.includes('not in')) return { ok: false, msg: 'Debes usar el operador NOT IN con una subconsulta.' };
+                    if (!s.includes('prestamos')) return { ok: false, msg: 'La subconsulta debe consultar la tabla prestamos.' };
+                    return { ok: true, msg: '¡Perfecto! Resolviste la pregunta #18 del Laboratorio del Banco con subconsulta NOT IN.' };
+                },
+                previewHeaders: ['nombre', 'apellido'],
+                previewRows: [
+                    ['Laura', 'García'],
+                    ['Camila', 'Fernández']
+                ]
+            },
+            {
+                schema: 'banco',
+                prompt: '[Lab Final Banco #17] "Mostrar el nombre, cargo y salario del empleado con el salario más alto de toda la empresa (usar subconsulta con MAX)."',
+                cols: 'nombre, cargo, salario',
+                hint: 'Compara el salario contra el máximo en una subconsulta: WHERE salario = (SELECT MAX(salario) FROM empleados).',
+                solution: `SELECT nombre, cargo, salario\nFROM empleados\nWHERE salario = (SELECT MAX(salario) FROM empleados);`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('empleados')) return { ok: false, msg: 'Consulta sobre la tabla empleados.' };
+                    if (!s.includes('max(')) return { ok: false, msg: 'Usa la función MAX(salario) dentro de una subconsulta en el WHERE.' };
+                    if (!s.includes('where') || !s.includes('salario')) return { ok: false, msg: 'Falta comparar WHERE salario = (SELECT MAX(salario)...).' };
+                    return { ok: true, msg: '¡Excelente! Subconsulta escalar con MAX completada con éxito.' };
+                },
+                previewHeaders: ['nombre', 'cargo', 'salario'],
+                previewRows: [
+                    ['Carlos Pérez', 'Gerente', '8500000.00']
+                ]
+            },
+            {
+                schema: 'banco',
+                prompt: '[Lab Final Banco #11] "Mostrar por cada tipo de transacción (tipo) el monto total acumulado (SUM) y la cantidad de operaciones realizadas (COUNT)."',
+                cols: 'tipo, SUM(monto), COUNT(*)',
+                hint: 'Agrupa por la columna tipo con GROUP BY y calcula SUM(monto) y COUNT(*).',
+                solution: `SELECT tipo, SUM(monto) AS total_monto, COUNT(*) AS total_transacciones\nFROM transacciones\nGROUP BY tipo;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('transacciones')) return { ok: false, msg: 'Consulta sobre la tabla transacciones.' };
+                    if (!s.includes('sum(') || !s.includes('count(')) return { ok: false, msg: 'Debes incluir ambas funciones de agregación: SUM(monto) y COUNT(*).' };
+                    if (!s.includes('group by') || !s.includes('tipo')) return { ok: false, msg: 'Falta la cláusula GROUP BY tipo al final.' };
+                    return { ok: true, msg: '¡Impecable! Punto #11 del Laboratorio del Banco resuelto.' };
+                },
+                previewHeaders: ['tipo', 'total_monto', 'total_transacciones'],
+                previewRows: [
+                    ['Deposito', '2800000.00', '3'],
+                    ['Retiro', '550000.00', '2'],
+                    ['Transferencia', '1000000.00', '1']
+                ]
+            },
+            {
+                schema: 'banco',
+                prompt: '[Lab Final Banco #14] "Mostrar la ciudad del cliente y la suma total de saldos de sus cuentas (SUM), ordenando las ciudades de mayor a menor saldo total (ORDER BY DESC)."',
+                cols: 'c.ciudad, SUM(cu.saldo)',
+                hint: 'Une clientes (c) con cuentas (cu) mediante id_cliente, agrupa por c.ciudad y añade ORDER BY saldo_total DESC.',
+                solution: `SELECT c.ciudad, SUM(cu.saldo) AS saldo_total\nFROM clientes c\nINNER JOIN cuentas cu ON c.id_cliente = cu.id_cliente\nGROUP BY c.ciudad\nORDER BY saldo_total DESC;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('clientes') || !s.includes('cuentas')) return { ok: false, msg: 'Debes relacionar clientes y cuentas con JOIN.' };
+                    if (!s.includes('sum(')) return { ok: false, msg: 'Calcula la suma con SUM(cu.saldo).' };
+                    if (!s.includes('group by') || !s.includes('ciudad')) return { ok: false, msg: 'Debes agrupar por ciudad usando GROUP BY c.ciudad.' };
+                    if (!s.includes('order by') || !s.includes('desc')) return { ok: false, msg: 'Falta ordenar de forma descendente con ORDER BY ... DESC.' };
+                    return { ok: true, msg: '¡Brillante! Combinaste JOIN + SUM + GROUP BY + ORDER BY DESC.' };
+                },
+                previewHeaders: ['ciudad', 'saldo_total'],
+                previewRows: [
+                    ['Bogotá', '20000000.00'],
+                    ['Medellín', '9500000.00'],
+                    ['Cali', '1200000.00'],
+                    ['Pasto', '850000.00']
+                ]
+            },
+            {
+                schema: 'banco',
+                prompt: '[Lab Final Banco #15] "Mostrar el nombre, apellido y ciudad de todos los clientes que poseen al menos un préstamo otorgado (utilizar subconsulta con IN)."',
+                cols: 'nombre, apellido, ciudad',
+                hint: 'Usa WHERE id_cliente IN (SELECT id_cliente FROM prestamos).',
+                solution: `SELECT nombre, apellido, ciudad\nFROM clientes\nWHERE id_cliente IN (SELECT id_cliente FROM prestamos);`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('clientes')) return { ok: false, msg: 'Consulta sobre la tabla clientes.' };
+                    if (!s.includes('in') || s.includes('not in')) return { ok: false, msg: 'Debes usar el operador IN (no NOT IN) con una subconsulta.' };
+                    if (!s.includes('prestamos')) return { ok: false, msg: 'La subconsulta debe apuntar a la tabla prestamos.' };
+                    return { ok: true, msg: '¡Correcto! Punto #15 del Laboratorio resuelto mediante subconsulta IN.' };
+                },
+                previewHeaders: ['nombre', 'apellido', 'ciudad'],
+                previewRows: [
+                    ['Juan', 'Rodríguez', 'Bogotá'],
+                    ['María', 'López', 'Cali'],
+                    ['Pedro', 'Martínez', 'Medellín']
+                ]
+            },
+            {
+                schema: 'biblio',
+                prompt: '[Lab Biblioteca] "Mostrar el título del libro, año de publicación y nombre del autor, únicamente para libros publicados después de 1970, ordenados cronológicamente de forma ascendente."',
+                cols: 'l.titulo, l.anio_publicacion, a.nombre',
+                hint: 'Haz INNER JOIN entre libros (l) y autores (a) por id_autor, filtra con WHERE l.anio_publicacion > 1970 y ordena con ORDER BY l.anio_publicacion ASC.',
+                solution: `SELECT l.titulo, l.anio_publicacion, a.nombre\nFROM libros l\nINNER JOIN autores a ON l.id_autor = a.id_autor\nWHERE l.anio_publicacion > 1970\nORDER BY l.anio_publicacion ASC;`,
+                validate: (sql) => {
+                    const s = sql.toLowerCase().replace(/\s+/g, ' ');
+                    if (!s.includes('libros') || !s.includes('autores')) return { ok: false, msg: 'Debes relacionar libros y autores.' };
+                    if (!s.includes('where') || !s.includes('1970')) return { ok: false, msg: 'Falta el filtro WHERE anio_publicacion > 1970.' };
+                    if (!s.includes('order by')) return { ok: false, msg: 'Falta ordenar cronológicamente con ORDER BY anio_publicacion.' };
+                    return { ok: true, msg: '¡Excelente! Consulta completa de cruce, filtrado temporal y ordenamiento ascendente.' };
+                },
+                previewHeaders: ['titulo', 'anio_publicacion', 'nombre'],
+                previewRows: [
+                    ['El amor en los tiempos del cólera', '1985', 'Gabriel García Márquez'],
+                    ['Harry Potter y la piedra filosofal', '1997', 'J.K. Rowling']
                 ]
             }
         ];
