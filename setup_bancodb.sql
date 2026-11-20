@@ -160,3 +160,4 @@ UNION ALL SELECT 'tipos_cuenta', COUNT(*) FROM tipos_cuenta
 UNION ALL SELECT 'cuentas', COUNT(*) FROM cuentas
 UNION ALL SELECT 'transacciones', COUNT(*) FROM transacciones
 UNION ALL SELECT 'prestamos', COUNT(*) FROM prestamos;
+
